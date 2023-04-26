@@ -1,6 +1,5 @@
 # ignore node_modules directory in frontend and backend
-ds-frontend/node_modules
-ds-backend/node_modules
+node_modules/
 
 # ignore build artifacts and compiled files in frontend and backend
 ds-frontend/build
