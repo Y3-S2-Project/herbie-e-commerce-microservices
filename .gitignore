@@ -1,11 +1,10 @@
 # ignore node_modules directory in frontend and backend
-node_modules/
+**/node_modules/
 
 # ignore build artifacts and compiled files in frontend and backend
-ds-frontend/build
-ds-backend/build
-ds-frontend/dist
-ds-backend/dist
+**/build
+**/dist
+
 
 # ignore editor and IDE specific files and directories
 .vscode
