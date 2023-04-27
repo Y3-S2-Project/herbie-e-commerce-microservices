@@ -5,14 +5,18 @@ import { v4 as uuidv4 } from "uuid";
 import { makeResponse } from "../utils/response";
 
 export const getAllProduct = asyncHandler(async (req, res) => {
-  try {
-    let Products = null;
 
+  try {
+    // get all products
+    let Products = null;
+    // if user is logged in and is a seller, get only his products
     if (req?.user) {
       Products = await Product.find({ pSeller: req?.user?.seller._id }).sort({
         _id: -1,
       });
+      // if user is not logged in, get all products
     } else Products = await Product.find().sort({ _id: -1 });
+    // if products are found, return them
     if (Products) {
       makeResponse({
         res,
@@ -28,6 +32,7 @@ export const getAllProduct = asyncHandler(async (req, res) => {
 
 export const getProductCount = async () => {
   try {
+    // get all products count
     let count = await Product.count();
     return count;
   } catch (err) {
@@ -51,9 +56,10 @@ export const postAddProduct = asyncHandler(async (req, res) => {
     pWeight: req.body.pWeight,
     pImages: req.body.pImages,
     pSeller: seller._id,
-    // ... other properties of the product
+ 
   });
   try {
+    // save the new product
     const product = await new Product(newProduct).save();
     if (product) {
       // once the new product is saved successfully, add it to the seller's product list
@@ -77,12 +83,15 @@ export const postAddProduct = asyncHandler(async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    // handle any errors that occur
     return res.status(500).json({ error: "Error creating product" });
   }
 });
 
 export const getDeleteProduct = asyncHandler(async (req, res) => {
+  // get the seller from the request object
   const { seller } = req.user;
+  // get the product id from the request params
   const { id } = req.params;
 
   try {
@@ -110,12 +119,14 @@ export const getDeleteProduct = asyncHandler(async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    // handle any errors that occur
     return res.status(500).json({ error: "Error deleting product" });
   }
 });
 
 export const editProduct = asyncHandler(async (req, res) => {
   try {
+    // find the product by id and update it
     const productToBeEdited = await Product.findOne({ pPid: req.body.pPid });
     if (productToBeEdited) {
       productToBeEdited.pName = req.body.pName;
@@ -129,6 +140,7 @@ export const editProduct = asyncHandler(async (req, res) => {
       productToBeEdited.pImages = req.body.pImages;
 
       const updatedProduct = await productToBeEdited.save();
+ // return a success response with the updated product object
       return res.json({
         success: "Product edit successfully",
         product: updatedProduct,
@@ -144,7 +156,9 @@ export const editProduct = asyncHandler(async (req, res) => {
 
 export const getAllProductOnSale = asyncHandler(async (req, res) => {
   try {
+    // get all products where sale state is true
     let Products = await Product.find({ pSaleStatus: true }).sort({ _id: -1 });
+   // if products are found, return them
     if (Products) {
       makeResponse({
         res,
@@ -160,6 +174,7 @@ export const getAllProductOnSale = asyncHandler(async (req, res) => {
 
 export const getSingleProduct = asyncHandler(async (req, res) => {
   try {
+    // get the product with the specified pPid
     let Products = await Product.find({ pPid: req.params.id });
     if (Products) {
       makeResponse({
@@ -177,14 +192,15 @@ export const getSingleProduct = asyncHandler(async (req, res) => {
 //update visible status
 export const updateVisibleStatus = asyncHandler(async (req, res) => {
 
-  console.log(req.user)
   try {
     // Find the product with the specified pPid
     let product = await Product.findOne({ pPid: req.body.pPid });
 
     // If the product exists, update its pVisible field to true
     if (product) {
+      // Update the product's pVisible field
       product.pVisible = true;
+      // Save the updated product
       let updatedProduct = await product.save();
       makeResponse({
         res,

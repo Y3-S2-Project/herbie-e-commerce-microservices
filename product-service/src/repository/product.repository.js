@@ -4,6 +4,7 @@ import Seller from "../models/seller.model";
 
 export const getAllProducts= async () => {
   try {
+    // find all Products
     const Products = await Product.find({});
     return {
       status: 200,
@@ -23,6 +24,7 @@ export const getAllProducts= async () => {
 
 export const getProductById = async (Product_id) => {
   try {
+    // find Product by id
     const Product = await Product.findById(Product_id);
     if (!Product) {
       return {
@@ -47,11 +49,10 @@ export const getProductById = async (Product_id) => {
 };
 
 export const getProducts = async (ProductData) => {
-  console.log("Product data in repo", ProductData);
+
   try {
+    // find Products by ProductData
     const Products = await Product.find(ProductData)
-      .populate("user", "name")
-      .exec();
     if (!Products) {
       return {
         status: 404,
@@ -76,8 +77,9 @@ export const getProducts = async (ProductData) => {
 
 export const createProduct = async (ProductData) => { 
   try {
+    //check if the seller exists
     const newProduct = await Product.create(ProductData);
-    //add the Product to the seller's sellerProducts array
+
     await Seller.updateOne(
       { _id: newProduct.seller },
       { $push: { sellerProducts: newProduct._id } }
@@ -102,17 +104,21 @@ export const createProduct = async (ProductData) => {
 
 export const deleteProduct= async (Product_id) => {
   try {
+    // find Product by id
     const deletedProduct = await Product.findByIdAndDelete(Product_id);
+    //check if the Product exists
     if (!deletedProduct) {
       return {
         status: 404,
         message: "Product not found",
       };
     }
+    // remove the Product from the seller's sProducts array
     await Seller.updateOne(
       { _id: deletedProduct.seller },
       { $pull: { sellerProducts: deletedProduct._id } }
     );
+    // delete all reviews of the Product
     return {
       status: 200,
       data: deletedProduct,
@@ -137,6 +143,7 @@ export const updateSellerProduct= async (
   ProductData
 ) => {
   try {
+    // find Product by id
     const Product = await Product.findById(Product_id);
     //check if the Product exists
     if (!Product) {
