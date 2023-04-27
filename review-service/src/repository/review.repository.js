@@ -1,7 +1,23 @@
 import Review from "../models/review.model";
 import Product from "../models/product.model";
 import Seller from "../models/seller.model";
+import User from "../models/user.model";
 import logger from "../utils/logger";
+
+// Get the current highest review ID from the database
+const getMaxReviewId = async () => {
+  const result = await Review.findOne()
+    .sort({ reviewID: -1 })
+    .select("reviewID")
+    .exec();
+  if (result) {
+    const currentId = result.reviewID;
+    const numericPart = parseInt(currentId.slice(1));
+    return numericPart;
+  } else {
+    return 0;
+  }
+};
 
 export const getAllReviewsRepository = async () => {
   try {
@@ -50,18 +66,29 @@ export const getReviewByIdRepository = async (review_id) => {
 export const getReviewsRepository = async (reviewData) => {
   console.log("review data in repo", reviewData);
   try {
-    const reviews = await Review.find(reviewData)
-    .populate("user", "name")
-    .exec();
+    const reviews = await Review.find(reviewData);
+
     if (!reviews) {
       return {
         status: 404,
         message: "Reviews not found",
       };
     }
+
+    const reviewsArray = [];
+
+    for (let i = 0; i < reviews.length; i++) {
+      const review = reviews[i].toObject();
+      const userId = review.userId;
+
+      const user = await User.findById(userId);
+      review.user = user?.toObject();
+
+      reviewsArray.push(review);
+    }
     return {
       status: 200,
-      data: reviews,
+      data: [...reviewsArray ],
       message: "Reviews retrieved successfully",
     };
   } catch (err) {
@@ -83,10 +110,12 @@ export const createProductReviewRepository = async (reviewData, product_id) => {
       message: "Product not found",
     };
   }
-
+  const maxReviewId = await getMaxReviewId();
+  const nextId = `R${(maxReviewId + 1).toString().padStart(3, "0")}`;
   const review = new Review({
     ...reviewData,
     product: product_id,
+    reviewID: nextId,
   });
 
   try {
@@ -118,10 +147,12 @@ export const createSellerReviewRepository = async (reviewData, seller_id) => {
       message: "Seller not found",
     };
   }
-
+  const maxReviewId = await getMaxReviewId();
+  const nextId = `R${(maxReviewId + 1).toString().padStart(3, "0")}`;
   const review = new Review({
     ...reviewData,
     seller: seller_id,
+    reviewID: nextId,
   });
 
   try {

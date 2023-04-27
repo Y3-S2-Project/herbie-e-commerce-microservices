@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commission-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: commission
+  template:
+    metadata:
+      labels:
+        app: commission
+    spec:
+      containers:
+        - name: commission
+          image: chamathjayasekarahtwondevops/commission
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: commission-service
+spec:
+  selector:
+    app: commission
+  type: ClusterIP
+  ports:
+    - name: commission
+      port: 3010
+      targetPort: 3010

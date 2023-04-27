@@ -49,7 +49,7 @@ const createOrder = asyncHandler(async (req, res) => {
 //   }
 // });
 const getAllOrders = asyncHandler(async (req, res) => {
-  console.log("sssssssssssssssssssssssssssssssss");
+
   const orderId = req.query?.orderId || null;
   try {
     let orders;

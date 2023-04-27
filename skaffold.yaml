@@ -55,6 +55,30 @@ build:
         manual:
           - dest: .
             src: "src/**/*.js"
+    - image: chamathjayasekarahtwondevops/payment
+      context: payment-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
+    - image: chamathjayasekarahtwondevops/delivery
+      context: delivery-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
+    - image: chamathjayasekarahtwondevops/commission
+      context: commission-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"                                
 
 manifests:
   rawYaml:
