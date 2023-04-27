@@ -23,7 +23,7 @@ metadata:
 spec:
   selector:
     app: notification
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: notification
       port: 3002

@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: review-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: review
   template:
     metadata:
       labels:
-        app: auth
+        app: review
     spec:
       containers:
-        - name: auth
-          image: chamathjayasekarahtwondevops/auth
+        - name: review
+          image: chamathjayasekarahtwondevops/review
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: review-service
 spec:
   selector:
-    app: auth
+    app: review
   type: ClusterIP
   ports:
-    - name: auth
-      port: 3001
-      targetPort: 3001
+    - name: review
+      port: 3006
+      targetPort: 3006

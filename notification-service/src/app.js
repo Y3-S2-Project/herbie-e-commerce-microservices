@@ -22,7 +22,7 @@ const server = http.createServer(app);
 // Create a Socket.IO instance and attach it to the HTTP server
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: "http://127.0.0.1:3000",
   },
 });
 

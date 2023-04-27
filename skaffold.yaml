@@ -4,16 +4,57 @@ build:
   local:
     push: false
   artifacts:
-    - image: chamathjayasekarahtwondevops/frontend
-      context: ds-frontend
+    - image: chamathjayasekarahtwondevops/auth
+      context: auth-service
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - dest: .
-            src: "**/**/*.js"
-          - dest: ./public
-            src: "./public/**/*"
+            src: "src/**/*.js"
+
+    - image: chamathjayasekarahtwondevops/notification
+      context: notification-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
+
+    - image: chamathjayasekarahtwondevops/product
+      context: product-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
+
+    - image: chamathjayasekarahtwondevops/order
+      context: order-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
+    - image: chamathjayasekarahtwondevops/review
+      context: review-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
+    - image: chamathjayasekarahtwondevops/shopping-cart
+      context: shopping-cart-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
 
 manifests:
   rawYaml:

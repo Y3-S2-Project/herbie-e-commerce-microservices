@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: product-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: product
   template:
     metadata:
       labels:
-        app: auth
+        app: product
     spec:
       containers:
-        - name: auth
-          image: chamathjayasekarahtwondevops/auth
+        - name: product
+          image: chamathjayasekarahtwondevops/product
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: product-service
 spec:
   selector:
-    app: auth
+    app: product
   type: ClusterIP
   ports:
-    - name: auth
-      port: 3001
-      targetPort: 3001
+    - name: product
+      port: 3003
+      targetPort: 3003
