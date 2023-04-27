@@ -32,7 +32,7 @@ If Minikube is installed correctly, you should see the version number displayed 
 1. Download and install Skaffold by following the instructions provided on the [official website](https://skaffold.dev/docs/install/).
 2. Verify that Skaffold is installed correctly by running the following command in a terminal:
 
-skaffold version
+```skaffold version```
 
 If Skaffold is installed correctly, you should see the version number displayed in the terminal.
 
@@ -41,7 +41,7 @@ If Skaffold is installed correctly, you should see the version number displayed 
 1. Download and install WSL2 by following the instructions provided on the [official website](https://docs.microsoft.com/en-us/windows/wsl/install).
 2. Verify that WSL2 is installed correctly by running the following command in a terminal:
 
-wsl --list
+```wsl --list```
 
 If WSL2 is installed correctly, you should see a list of available distributions displayed in the terminal.
 
@@ -50,17 +50,17 @@ If WSL2 is installed correctly, you should see a list of available distributions
 1. Start Docker Desktop and wait for it to initialize.
 2. Start Minikube by running the following command in a terminal:
 
-minikube start
+```minikube start```
 
 3. Run the following command to start a tunnel to access the Kubernetes services:
 
-minikube tunnel
+```minikube tunnel```
 
 
 4. In a separate terminal window, navigate to the root directory of the project.
 5. Run the following command to deploy the application to Minikube:
 
-skaffold dev
+```skaffold dev```
 
 
 This command will build and deploy the application to the Minikube cluster. Skaffold will automatically watch for changes in your code and redeploy the application as needed.
@@ -68,13 +68,13 @@ This command will build and deploy the application to the Minikube cluster. Skaf
 
 6. Once the application is deployed, run the following command for each service to forward its port to your local machine:
 
-kubectl port-forward svc/[service-name] [port-number]:[port-number]
+```kubectl port-forward svc/[service-name] [port-number]:[port-number]```
 
 Replace `[service-name]` with the name of the service and `[port-number]` with the port number that the service is running on.
 
 For example, to forward the port for the `web` service running on port `8080`, run the following command:
 
-kubectl port-forward svc/web 8080:8080
+```kubectl port-forward svc/web 8080:8080```
 ## Conclusion
 
 By following the instructions provided in this README file, you should now be able to install and run a project using Minikube, Docker Desktop, Skaffold, and WSL2 on your local machine. If you encounter any issues during the installation or running process, please refer to the official documentation for each tool or seek help from the community.
