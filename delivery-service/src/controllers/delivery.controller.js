@@ -9,6 +9,7 @@ import {
   getDeliveryByIdService,
 } from "../services/delivery.services";
 
+// get all delivery controller
 export const getAllDeliveryController = asyncHandler(async (req, res) => {
   const reviews = await getAllDeliveryService();
   return makeResponse({

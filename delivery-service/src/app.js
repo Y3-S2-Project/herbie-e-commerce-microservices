@@ -15,7 +15,7 @@ app.use("/api", routes);
 connectDB();
 
 
-// Start the server
+// Start delivery service
 const port = process.env.PORT || 3009;
 app.listen(port, () => {
   console.log(`Delivery Service successfully started on port ${port}`);
