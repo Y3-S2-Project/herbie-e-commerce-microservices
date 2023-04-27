@@ -14,7 +14,7 @@ export const generateToken = (user) => {
     expiresIn: `${process.env.JWT_EXPIRE}d`
   })
 }
-
+//
 export const decodeJwtToken = (token) => {
   return jwt.verify(token, process.env.JWT_SECRET)
 }

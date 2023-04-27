@@ -19,7 +19,7 @@ export const getAllDeliveryController = asyncHandler(async (req, res) => {
     message: "Delivery retrieved succesfully",
   });
 });
-
+// create delivery controller
 export const createDeliveryController = asyncHandler(async (req, res) => {
   const response = await createDeliveryService(req.body);
   if (!response)
@@ -36,7 +36,7 @@ export const createDeliveryController = asyncHandler(async (req, res) => {
     message: "Delivery created succesfully",
   });
 });
-
+// get delivery by delivery id controller
 export const getDeliveryByDeliveryIdController = asyncHandler(
   async (req, res) => {
     const response = await getDeliveryByDeliveryIdService(
@@ -57,8 +57,9 @@ export const getDeliveryByDeliveryIdController = asyncHandler(
     });
   }
 );
-
+// update delivery controller
 export const updateDeliveryController = asyncHandler(async (req, res) => {
+  // call update delivery service
   const response = await updateDeliveryService(req.body);
   if (!response)
     return makeResponse({
@@ -74,7 +75,7 @@ export const updateDeliveryController = asyncHandler(async (req, res) => {
     message: "Delivery updated succesfully",
   });
 });
-
+// get delivery by id controller
 export const getDeliveryByIdController = asyncHandler(async (req, res) => {
   const response = await getDeliveryByIdService(req.query);
   if (!response)

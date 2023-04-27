@@ -6,7 +6,9 @@ import {
   updateCommissionService,
 } from "../services/commission.service";
 
+// get commission controller
 export const getCommission = asyncHandler(async (req, res) => {
+  //
   const result = await getCommissionService();
   if (result)
     return makeResponse({

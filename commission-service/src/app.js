@@ -14,7 +14,7 @@ app.get("/", (req, res) =>
 app.use("/api", routes);
 connectDB();
 
-// Start the server
+// Commision service
 const port = process.env.PORT || 3010;
 app.listen(port, () => {
   console.log(`Commission Service successfully started on port ${port}`);
