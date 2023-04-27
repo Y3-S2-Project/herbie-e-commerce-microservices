@@ -14,7 +14,7 @@ app.get("/", (req, res) =>
 app.use("/api", routes);
 connectDB();
 
-// Start the server
+// Auth service is runiing on port 3001
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Herbie Auth server successfully started on port ${port}`);
