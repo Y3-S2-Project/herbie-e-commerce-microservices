@@ -4,6 +4,16 @@ build:
   local:
     push: false
   artifacts:
+    - image: chamathjayasekarahtwondevops/frontend
+      context: front-end
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "**/**/*.js"
+          - dest: ./public
+            src: "./public/**/*"
     - image: chamathjayasekarahtwondevops/auth
       context: auth-service
       docker:
@@ -78,7 +88,7 @@ build:
       sync:
         manual:
           - dest: .
-            src: "src/**/*.js"                                
+            src: "src/**/*.js"
 
 manifests:
   rawYaml:
