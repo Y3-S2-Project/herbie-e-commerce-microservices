@@ -2,8 +2,9 @@ import asyncHandler from "../middleware/async";
 import { makeResponse } from "../utils/response";
 import { loginUser, registerUser } from "../services/auth.services";
 import { sendTokenResponse } from "../utils/jwt";
-
+// login user
 export const login = asyncHandler(async (req, res) => {
+  
   const user = await loginUser(req.body);
   if (!user) {
     return makeResponse({ res, status: 500, message: "Failed to login user" });
@@ -13,7 +14,7 @@ export const login = asyncHandler(async (req, res) => {
   }
   return sendTokenResponse(res, user, "User logged in successfully");
 });
-
+// create user
 export const register = asyncHandler(async (req, res) => {
   const result = await registerUser(req.body);
   if (!result)
