@@ -4,11 +4,14 @@ import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
 //Create new order
 const createOrder = asyncHandler(async (req, res) => {
+  // create a new order
   const newOrder = new Order(req.body);
   try {
+    // get the current highest order ID from the database
     const orderCount = await Order.count();
     newOrder.orderId = "OID00" + (parseInt(orderCount) + 1);
     try {
+      // save the order to the database
       const savedOrder = await newOrder.save();
       res.status(201).json(savedOrder);
     } catch (err) {
@@ -18,11 +21,12 @@ const createOrder = asyncHandler(async (req, res) => {
     console.log(err);
   }
 });
-
+//Get all orders
 const getAllOrders = asyncHandler(async (req, res) => {
-
+  // get the order ID from the query
   const orderId = req.query?.orderId || null;
   try {
+    // get all orders from the database
     let orders;
     if (orderId) {
       orders = await Order.find({ orderId });
@@ -64,10 +68,10 @@ const getAllOrders = asyncHandler(async (req, res) => {
 
 //Get order by order id
 const getOrderById = asyncHandler(async (req, res) => {
-  console.log(req.params.orderId);
   try {
-    const order = await Order.findOne({ orderId: req.params.orderId })
-     console.log(order);
+    // get order by order ID
+    const order = await Order.findOne({ orderId: req.params.orderId });
+   // get order by order ID
     if (order) {
       const products = await Promise.all(
         order.products.map(async (item) => {
@@ -75,7 +79,6 @@ const getOrderById = asyncHandler(async (req, res) => {
           return { product, quantity: item.quantity };
         })
       );
-      
 
       res.status(200).json({ ...order.toJSON(), products });
     } else {
@@ -89,6 +92,7 @@ const getOrderById = asyncHandler(async (req, res) => {
 //Update order status
 const updateOrderStatus = asyncHandler(async (req, res) => {
   try {
+    // update order status
     const order = await Order.findOne({ orderId: req.params.orderId });
     if (order) {
       order.orderStatus = req.body.orderStatus;
@@ -105,6 +109,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
 //Delete order
 const deleteOrder = asyncHandler(async (req, res) => {
   try {
+    // delete order
     const order = await Order.findOne({ orderId: req.params.orderId });
     if (order) {
       await order.remove();
@@ -120,6 +125,7 @@ const deleteOrder = asyncHandler(async (req, res) => {
 //Get total sales
 const getTotalSales = asyncHandler(async (req, res) => {
   try {
+    // get total sales
     const totalSales = await Order.aggregate([
       { $group: { _id: null, totalSales: { $sum: "$totalPrice" } } },
     ]);
@@ -132,7 +138,7 @@ const getTotalSales = asyncHandler(async (req, res) => {
     res.status(500).json(err);
   }
 });
-
+//Export functions
 module.exports = {
   createOrder,
   getAllOrders,

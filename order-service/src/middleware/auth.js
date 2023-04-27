@@ -3,6 +3,7 @@ import { decodeJwtToken } from "../utils/jwt";
 import { makeResponse } from "../utils/response";
 import asyncHandler from "./async";
 
+//To protect routes for only authenticated users
 export const protect = asyncHandler(async (req, res, next) => {
   const token = req.headers.authorization
     ? req.headers.authorization.startsWith("Bearer")

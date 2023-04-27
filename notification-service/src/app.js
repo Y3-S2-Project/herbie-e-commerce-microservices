@@ -28,7 +28,7 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("New client connected" + socket.id);
-  //console.log(socket);
+
 
   socket.on("initial_data", async () => {
     const feed = await Feed.find({}).sort({ createdAt: -1 });
@@ -36,7 +36,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("post_data", async (dataString) => {
+    //parse data
     const data = JSON.parse(dataString);
+    //save data
     const feed = new Feed({
       read: false,
       userID: data.userID,
@@ -47,14 +49,15 @@ io.on("connection", (socket) => {
   });
 
   socket.on("check_all_notifications", async () => {
+    //parse data
     const feeds = await Feed.find({});
-
+  // set all notifications to read
     feeds.forEach((feed) => {
       feed.read = true;
     });
-
+    //save data
     await Feed.create(feeds);
-
+    //send data
     io.sockets.emit("change_data");
   });
 
