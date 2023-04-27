@@ -6,6 +6,7 @@ import logger from "../utils/logger";
 
 // Get the current highest review ID from the database
 const getMaxReviewId = async () => {
+  // Get the review with the highest reviewID
   const result = await Review.findOne()
     .sort({ reviewID: -1 })
     .select("reviewID")
@@ -21,6 +22,7 @@ const getMaxReviewId = async () => {
 
 export const getAllReviewsRepository = async () => {
   try {
+    // find all reviews
     const reviews = await Review.find({});
     return {
       status: 200,
@@ -40,6 +42,7 @@ export const getAllReviewsRepository = async () => {
 
 export const getReviewByIdRepository = async (review_id) => {
   try {
+    // find review by id
     const review = await Review.findById(review_id);
     if (!review) {
       return {
@@ -64,17 +67,18 @@ export const getReviewByIdRepository = async (review_id) => {
 };
 
 export const getReviewsRepository = async (reviewData) => {
-  console.log("review data in repo", reviewData);
-  try {
-    const reviews = await Review.find(reviewData);
 
+  try {
+    // find reviews by reviewData
+    const reviews = await Review.find(reviewData);
+     // populate the user field of the review
     if (!reviews) {
       return {
         status: 404,
         message: "Reviews not found",
       };
     }
-
+    
     const reviewsArray = [];
 
     for (let i = 0; i < reviews.length; i++) {
@@ -103,6 +107,7 @@ export const getReviewsRepository = async (reviewData) => {
 };
 
 export const createProductReviewRepository = async (reviewData, product_id) => {
+  // Check if the product exists
   const product = await Product.findById(product_id);
   if (!product) {
     return {
@@ -110,6 +115,7 @@ export const createProductReviewRepository = async (reviewData, product_id) => {
       message: "Product not found",
     };
   }
+  // Get the next review ID
   const maxReviewId = await getMaxReviewId();
   const nextId = `R${(maxReviewId + 1).toString().padStart(3, "0")}`;
   const review = new Review({
@@ -119,6 +125,7 @@ export const createProductReviewRepository = async (reviewData, product_id) => {
   });
 
   try {
+    // Save the review to the database
     const savedReview = await review.save();
     // Add the new review to the product's pReviews array
     product.pReviews.push(savedReview._id);
@@ -140,6 +147,7 @@ export const createProductReviewRepository = async (reviewData, product_id) => {
 };
 
 export const createSellerReviewRepository = async (reviewData, seller_id) => {
+  // Check if the seller exists
   const seller = await Seller.findById(seller_id);
   if (!seller) {
     return {
@@ -147,6 +155,7 @@ export const createSellerReviewRepository = async (reviewData, seller_id) => {
       message: "Seller not found",
     };
   }
+  // Get the next review ID
   const maxReviewId = await getMaxReviewId();
   const nextId = `R${(maxReviewId + 1).toString().padStart(3, "0")}`;
   const review = new Review({
@@ -156,6 +165,7 @@ export const createSellerReviewRepository = async (reviewData, seller_id) => {
   });
 
   try {
+    // Save the review to the database
     const savedReview = await review.save();
     // Add the new review to the seller's sReviews array
     seller.sellerReviews.push(savedReview._id);
@@ -178,6 +188,7 @@ export const createSellerReviewRepository = async (reviewData, seller_id) => {
 
 export const deleteProductReviewRepository = async (review_id) => {
   try {
+    // find review by id
     const deletedReview = await Review.findByIdAndDelete(review_id);
     if (!deletedReview) {
       return {
@@ -185,6 +196,7 @@ export const deleteProductReviewRepository = async (review_id) => {
         message: "Review not found",
       };
     }
+    // remove the review from the product's pReviews array
     await Product.updateOne(
       { _id: deletedReview.product },
       { $pull: { pReviews: deletedReview._id } }
@@ -207,6 +219,7 @@ export const deleteProductReviewRepository = async (review_id) => {
 
 export const deleteSellerReviewRepository = async (review_id) => {
   try {
+    // find review by id
     const deletedReview = await Review.findByIdAndDelete(review_id);
     if (!deletedReview) {
       return {
@@ -214,6 +227,7 @@ export const deleteSellerReviewRepository = async (review_id) => {
         message: "Review not found",
       };
     }
+    // remove the review from the seller's sReviews array
     await Seller.updateOne(
       { _id: deletedReview.seller },
       { $pull: { sellerReviews: deletedReview._id } }
@@ -240,8 +254,9 @@ export const updateProductReviewRepository = async (
   reviewData
 ) => {
   try {
-    const review = await Review.findById(review_id);
     //check if the review exists
+    const review = await Review.findById(review_id);
+    
     if (!review) {
       return {
         status: 404,

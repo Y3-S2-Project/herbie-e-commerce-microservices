@@ -14,7 +14,7 @@ app.get("/", (req, res) =>
 app.use("/api", routes);
 connectDB();
 
-// Start the server
+// Review Service start 
 const port = process.env.PORT || 3006;
 app.listen(port, () => {
   console.log(`Review Service successfully started on port ${port}`);

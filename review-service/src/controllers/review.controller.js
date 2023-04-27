@@ -12,6 +12,7 @@ import {
   getReviewsService,
 } from "../services/review.services";
 
+// get all reviews controller
 export const getAllReviewsController = asyncHandler(async (req, res) => {
   const reviews = await getAllReviewsService();
   return makeResponse({
@@ -21,7 +22,7 @@ export const getAllReviewsController = asyncHandler(async (req, res) => {
     message: "Reviews retrieved succesfully",
   });
 });
-
+// get a review by id controller
 export const getReviewByIdController = asyncHandler(async (req, res) => {
   const response = await getReviewByIdService(req.params.review_id);
   if (!response)
@@ -39,6 +40,7 @@ export const getReviewByIdController = asyncHandler(async (req, res) => {
   });
 });
 
+// get reviews controller
 export const getReviewsController = asyncHandler(async (req, res) => {
   console.log("req params: ", req.query);
   const response = await getReviewsService(req.query);
@@ -56,7 +58,7 @@ export const getReviewsController = asyncHandler(async (req, res) => {
     message: "Reviews retrieved succesfully",
   });
 });
-
+// create product review controller
 export const createProductReviewController = asyncHandler(async (req, res) => {
   const response = await createProductReviewService(req.body);
   if (!response)
@@ -73,7 +75,7 @@ export const createProductReviewController = asyncHandler(async (req, res) => {
     message: "Product Review created succesfully",
   });
 });
-
+// create seller review controller
 export const createSellerReviewController = asyncHandler(async (req, res) => {
   const response = await createSellerReviewService(req.body);
   if (!response)
@@ -90,7 +92,7 @@ export const createSellerReviewController = asyncHandler(async (req, res) => {
     message: "Seller Review created succesfully",
   });
 });
-
+// delete product review controller
 export const deleteProductReviewController = asyncHandler(async (req, res) => {
   const response = await deleteProductReviewService(req.params.review_id);
   if (!response)
@@ -107,7 +109,7 @@ export const deleteProductReviewController = asyncHandler(async (req, res) => {
     message: "Product Review deleted succesfully",
   });
 });
-
+// delete seller review controller
 export const deleteSellerReviewController = asyncHandler(async (req, res) => {
   const response = await deleteSellerReviewService(req.params.review_id);
   if (!response)
@@ -124,7 +126,7 @@ export const deleteSellerReviewController = asyncHandler(async (req, res) => {
     message: "Seller Review deleted succesfully",
   });
 });
-
+// update product review controller
 export const updateProductReviewController = asyncHandler(async (req, res) => {
   const response = await updateProductReviewService(
     req.params.user_id,
@@ -144,7 +146,7 @@ export const updateProductReviewController = asyncHandler(async (req, res) => {
     message: "Product Review updated succesfully",
   });
 });
-
+// update seller review controller
 export const updateSellerReviewController = asyncHandler(async (req, res) => {
   const response = await updateSellerReviewService(
     req.params.user_id,
