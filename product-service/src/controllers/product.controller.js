@@ -115,27 +115,27 @@ export const getDeleteProduct = asyncHandler(async (req, res) => {
 });
 
 export const editProduct = asyncHandler(async (req, res) => {
-  const { id } = req.body.pId;
-  const newData = {
-    pName: req.body.pName,
-    pDescription: req.body.pDescription,
-    pStatus: req.body.pStatus,
-    pCategory: req.body.pCategory,
-    pQuantity: req.body.pQuantity,
-    pPrice: req.body.pPrice,
-    pOffer: req.body.pOffer,
-    pWeight: req.body.pWeight,
-    pImages: req.body.pImages,
-  };
   try {
-    const editedProduct = Product.findByIdAndUpdate(id, newData, {
-      new: true,
-    });
+    const productToBeEdited = await Product.findOne({ pPid: req.body.pPid });
+    if (productToBeEdited) {
+      productToBeEdited.pName = req.body.pName;
+      productToBeEdited.pDescription = req.body.pDescription;
+      productToBeEdited.pStatus = req.body.pStatus;
+      productToBeEdited.pCategory = req.body.pCategory;
+      productToBeEdited.pQuantity = req.body.pQuantity;
+      productToBeEdited.pPrice = req.body.pPrice;
+      productToBeEdited.pOffer = req.body.pOffer;
+      productToBeEdited.pWeight = req.body.pWeight;
+      productToBeEdited.pImages = req.body.pImages;
 
-    return res.json({
-      success: "Product edit successfully",
-      product: editedProduct,
-    });
+      const updatedProduct = await productToBeEdited.save();
+      return res.json({
+        success: "Product edit successfully",
+        product: updatedProduct,
+      });
+    } else {
+      return res.status(404).json({ error: "Product not found" });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: "Error editing product" });
@@ -176,6 +176,8 @@ export const getSingleProduct = asyncHandler(async (req, res) => {
 
 //update visible status
 export const updateVisibleStatus = asyncHandler(async (req, res) => {
+
+  console.log(req.user)
   try {
     // Find the product with the specified pPid
     let product = await Product.findOne({ pPid: req.body.pPid });

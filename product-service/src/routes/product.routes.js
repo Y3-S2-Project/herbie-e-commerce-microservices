@@ -27,10 +27,9 @@ productRouter.get("/seller/all-product", protect, sellerProtect, getAllProduct);
 
 productRouter.post("/add-product", protect, sellerProtect, postAddProduct);
 productRouter.post(
-  "/edit-product",
+  "/seller/edit-product",
   protect,
   sellerProtect,
-  adminProtect,
   editProduct
 );
 productRouter.get("/all-product-onsale", getAllProductOnSale);
@@ -42,7 +41,7 @@ productRouter.delete(
 );
 productRouter.get("/single-product/:id", getSingleProduct);
 productRouter.patch(
-  "/confirm-product",
+  "/admin/confirm-product",
   protect,
   adminProtect,
   updateVisibleStatus
