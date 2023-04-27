@@ -9,7 +9,7 @@ app.use(cors());
 
 app.use(express.json({ limit: "1mb" }));
 app.get("/", (req, res) =>
-  res.status(200).json({ message: "Product Service Up and Running" })
+  res.status(200).json({ message: "Order Service Up and Running" })
 );
 app.use("/api", routes);
 connectDB();
@@ -17,5 +17,5 @@ connectDB();
 // Start the server
 const port = process.env.PORT || 3004;
 app.listen(port, () => {
-  console.log(`Product Service successfully started on port ${port}`);
+  console.log(`Order Service successfully started on port ${port}`);
 });

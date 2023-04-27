@@ -1,5 +1,4 @@
 import express from "express";
-
 import cartRouter from "./cart.routes";
 
 const router = express.Router();

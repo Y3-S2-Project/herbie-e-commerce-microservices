@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
+import Buyer from "./buyer.model.js";
+
+// Register the schemas
+mongoose.model("Buyer", Buyer);
 
 const UserSchema = new mongoose.Schema({
   role: {
