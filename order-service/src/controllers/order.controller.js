@@ -1,5 +1,7 @@
 import Order from "../models/order.model.js";
 import asyncHandler from "../middleware/async.js";
+import Product from "../models/product.model.js";
+import User from "../models/user.model.js";
 //Create new order
 const createOrder = asyncHandler(async (req, res) => {
   const newOrder = new Order(req.body);
@@ -18,32 +20,93 @@ const createOrder = asyncHandler(async (req, res) => {
 });
 
 //Get all orders
+// const getAllOrders = asyncHandler(async (req, res) => {
+//   const orderId = req.query?.orderId || null;
+//   const products = null;
+//   try {
+//     let orders;
+//     if (orderId) {
+//       orders = await Order.find({ orderId });
+
+//       products = await Promise.all(
+//         orders.products.map(async (item) => {
+//           const product = await Product.findById(item.product);
+//           return { product, quantity: item.quantity };
+//         })
+//       );
+//     } else {
+//       orders = await Order.find();
+//       products = await Promise.all(
+//         orders.products.map(async (item) => {
+//           const product = await Product.findById(item.product);
+//           return { product, quantity: item.quantity };
+//         })
+//       );
+//     }
+//     res.status(200).json(orders);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 const getAllOrders = asyncHandler(async (req, res) => {
+  console.log("sssssssssssssssssssssssssssssssss");
   const orderId = req.query?.orderId || null;
   try {
     let orders;
     if (orderId) {
-      orders = await Order.find({ orderId }).populate.populate(
-        "products.product"
-      );
+      orders = await Order.find({ orderId });
     } else {
-      orders = await Order.find().populate("products.product").populate("userId");
+      orders = await Order.find();
     }
-    res.status(200).json(orders);
+
+    const ordersArray = [];
+
+    for (let i = 0; i < orders.length; i++) {
+      const order = orders[i].toObject();
+      const userId = order.userId;
+
+      const user = await User.findById(userId);
+      order.userId = user?.toObject();
+
+      const products = order.products;
+      const newProducts = [];
+
+      for (let j = 0; j < products.length; j++) {
+        const product = await Product.findById(products[j].product);
+        newProducts.push({
+          product: product?.toObject(),
+          quantity: products[j].quantity,
+        });
+      }
+
+      order.products = newProducts;
+
+      ordersArray.push(order);
+    }
+
+    res.status(200).json(ordersArray);
   } catch (err) {
     res.status(500).json(err);
+    console.log(err);
   }
 });
 
 //Get order by order id
 const getOrderById = asyncHandler(async (req, res) => {
+  console.log(req.params.orderId);
   try {
-    const order = await Order.findOne({ orderId: req.params.orderId }).populate(
-      "products.product"
-    );
-
+    const order = await Order.findOne({ orderId: req.params.orderId })
+     console.log(order);
     if (order) {
-      res.status(200).json(order);
+      const products = await Promise.all(
+        order.products.map(async (item) => {
+          const product = await Product.findById(item.product);
+          return { product, quantity: item.quantity };
+        })
+      );
+      
+
+      res.status(200).json({ ...order.toJSON(), products });
     } else {
       res.status(404).json({ message: "Order not found" });
     }

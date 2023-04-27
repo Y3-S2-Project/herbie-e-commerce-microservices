@@ -1,6 +1,7 @@
 import asyncHandler from "../middleware/async.js";
 import Cart from "../models/cart.model.js";
 import Product from "../models/product.model.js";
+import User from "../models/user.model.js";
 //Create new shopping cart
 const createCart = asyncHandler(async (req, res) => {
   const { userId, products } = req.body;
@@ -146,6 +147,7 @@ const getTotalPrice = asyncHandler(async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 
 //Get the count of products in the cart
 const getCartCount = asyncHandler(async (req, res) => {

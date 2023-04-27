@@ -17,6 +17,7 @@ cartRouter
   .get(protect, getCartByUserId)
   .put(protect, updateCart)
   .delete(protect, deleteCart);
+  
 cartRouter.route('/:userId/:productId').delete(protect, deleteProductFromCart);
 // cartRouter.route('/:userId/:productId/').put(protect, updateProductQuantity);
 cartRouter.route('/getTotalPrice/:userId').get(protect,buyerProtect, getTotalPrice);
