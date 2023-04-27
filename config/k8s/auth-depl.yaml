@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: front-end-depl
+  name: auth-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: front-end
+      app: auth
   template:
     metadata:
       labels:
-        app: front-end
+        app: auth
     spec:
       containers:
-        - name: front-end
-          image: chamathjayasekarahtwondevops/frontend
+        - name: auth
+          image: chamathjayasekarahtwondevops/auth
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: front-end-service
+  name: auth-service
 spec:
   selector:
-    app: front-end
+    app: auth
   type: LoadBalancer
   ports:
-    - name: front-end
-      port: 3000
-      targetPort: 3000
+    - name: auth
+      port: 3001
+      targetPort: 3001
