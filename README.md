@@ -23,7 +23,7 @@ Before you proceed with the installation and running of the project, make sure y
 1. Download and install Minikube by following the instructions provided on the [official website](https://minikube.sigs.k8s.io/docs/start/).
 2. Verify that Minikube is installed correctly by running the following command in a terminal:
 
-minikube version
+```minikube version```
 
 If Minikube is installed correctly, you should see the version number displayed in the terminal.
 
