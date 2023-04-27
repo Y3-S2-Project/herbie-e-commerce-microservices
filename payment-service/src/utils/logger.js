@@ -1,28 +1,35 @@
-import winston from 'winston'
+import winston from "winston";
 
+//stacktrace format for error
 const stacktrace = winston.format((info) => {
   if (info instanceof Error) {
     return Object.assign({}, info, {
       stack: info.stack,
-      message: info.message
-    })
+      message: info.message,
+    });
   }
-  return info
-})
+  return info;
+});
 
+//logger
 const logger = winston.createLogger({
-  format: winston.format.combine(stacktrace(), winston.format.timestamp(), winston.format.json(), winston.format.prettyPrint()),
+  format: winston.format.combine(
+    stacktrace(),
+    winston.format.timestamp(),
+    winston.format.json(),
+    winston.format.prettyPrint()
+  ),
   transports: [
     new winston.transports.Console(),
     new winston.transports.File({
       filename: `logs/error/${new Date().toISOString().slice(0, 10)}.log`,
-      level: 'error'
+      level: "error",
     }),
     new winston.transports.File({
       filename: `logs/info/${new Date().toISOString().slice(0, 10)}.log`,
-      level: 'info'
-    })
-  ]
-})
+      level: "info",
+    }),
+  ],
+});
 
-export default logger
+export default logger;

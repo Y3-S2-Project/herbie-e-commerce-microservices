@@ -19,35 +19,6 @@ const createOrder = asyncHandler(async (req, res) => {
   }
 });
 
-//Get all orders
-// const getAllOrders = asyncHandler(async (req, res) => {
-//   const orderId = req.query?.orderId || null;
-//   const products = null;
-//   try {
-//     let orders;
-//     if (orderId) {
-//       orders = await Order.find({ orderId });
-
-//       products = await Promise.all(
-//         orders.products.map(async (item) => {
-//           const product = await Product.findById(item.product);
-//           return { product, quantity: item.quantity };
-//         })
-//       );
-//     } else {
-//       orders = await Order.find();
-//       products = await Promise.all(
-//         orders.products.map(async (item) => {
-//           const product = await Product.findById(item.product);
-//           return { product, quantity: item.quantity };
-//         })
-//       );
-//     }
-//     res.status(200).json(orders);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
 const getAllOrders = asyncHandler(async (req, res) => {
 
   const orderId = req.query?.orderId || null;
