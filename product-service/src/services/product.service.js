@@ -1,46 +1,43 @@
 import {
-  getAllProductsRepository,
-  createProductProductRepository,
-  deleteProductProductRepository,
-  updateProductProductRepository,
-  createSellerProductRepository,
-  deleteSellerProductRepository,
-  updateSellerProductRepository,
-  getProductByIdRepository,
-  getProductsRepository,
-} from "../repository/Product.repository.js";
+  getAllProducts,
+  getProductById,
+  getProducts,
+  createProduct,
+
+  deleteProduct,
+  deleteSellerProduct,
+  updateSellerProduct,
+
+
+  
+} from '../repository/product.repository.js'
 
 export const getAllProductsService = async () => {
-  const Products = await getAllProductsRepository();
+  const Products = await getAllProducts();
   return Products;
 };
 
 export const getProductsService = async (ProductData) => {
-  return await getProductsRepository(ProductData);
+  return await getProducts(ProductData);
 };
 
 export const getProductByIdService = async (Product_id) => {
-  const Product = await getProductByIdRepository(Product_id);
+  const Product = await getProductById(Product_id);
   return Product;
 };
 
-export const createProductProductService = async (Product) => {
-  const { product } = Product;
-  return await createProductProductRepository(Product, product._id);
-};
+
 
 export const createSellerProductService = async (Product) => {
   const { seller } = Product;
-  return await createSellerProductRepository(Product, seller._id);
+  return await createProduct(Product, seller._id);
 };
 
-export const deleteProductProductService = async (Product_id) => {
-  return await deleteProductProductRepository(Product_id);
+export const deleteProduct= async (Product_id) => {
+  return await deleteProduct(Product_id);
 };
 
-export const deleteSellerProductService = async (Product_id) => {
-  return await deleteSellerProductRepository(Product_id);
-};
+
 
 export const updateProductProductService = async (user_id, ProductData) => {
   const { _id } = ProductData;

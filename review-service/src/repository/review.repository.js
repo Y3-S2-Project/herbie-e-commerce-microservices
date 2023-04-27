@@ -79,7 +79,7 @@ export const getReviewsRepository = async (reviewData) => {
 
     for (let i = 0; i < reviews.length; i++) {
       const review = reviews[i].toObject();
-      const userId = review.userId;
+      const userId = review.user;
 
       const user = await User.findById(userId);
       review.user = user?.toObject();

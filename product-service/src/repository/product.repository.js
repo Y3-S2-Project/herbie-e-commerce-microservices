@@ -74,9 +74,29 @@ export const getProducts = async (ProductData) => {
   }
 };
 
-export const createProductProduct= async (ProductData, product_id) => {
-
-};
+export const createProduct = async (ProductData) => { 
+  try {
+    const newProduct = await Product.create(ProductData);
+    //add the Product to the seller's sellerProducts array
+    await Seller.updateOne(
+      { _id: newProduct.seller },
+      { $push: { sellerProducts: newProduct._id } }
+    );
+    return {
+      status: 201,
+      data: newProduct,
+      message: "Seller Product created successfully",
+    };
+  } catch (err) {
+    console.error(
+      `An error occurred when creating a seller Product - err: ${err.message}`
+    );
+    return {
+      status: 500,
+      message: "Could not create the seller Product",
+    };
+  }
+}
 
 
 
