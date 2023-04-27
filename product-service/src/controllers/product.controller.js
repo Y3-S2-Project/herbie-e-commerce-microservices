@@ -115,13 +115,27 @@ export const getDeleteProduct = asyncHandler(async (req, res) => {
 });
 
 export const editProduct = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body.pId;
+  const newData = {
+    pName: req.body.pName,
+    pDescription: req.body.pDescription,
+    pStatus: req.body.pStatus,
+    pCategory: req.body.pCategory,
+    pQuantity: req.body.pQuantity,
+    pPrice: req.body.pPrice,
+    pOffer: req.body.pOffer,
+    pWeight: req.body.pWeight,
+    pImages: req.body.pImages,
+  };
   try {
-    const editedProduct = Product.findByIdAndUpdate(id, req.body, {
+    const editedProduct = Product.findByIdAndUpdate(id, newData, {
       new: true,
     });
 
-    return res.json({ success: "Product edit successfully" });
+    return res.json({
+      success: "Product edit successfully",
+      product: editedProduct,
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: "Error editing product" });

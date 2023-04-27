@@ -27,7 +27,7 @@ productRouter.get("/seller/all-product", protect, sellerProtect, getAllProduct);
 
 productRouter.post("/add-product", protect, sellerProtect, postAddProduct);
 productRouter.post(
-  "/edit-product/:id",
+  "/edit-product",
   protect,
   sellerProtect,
   adminProtect,
