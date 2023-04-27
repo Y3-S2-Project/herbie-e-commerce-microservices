@@ -65,6 +65,20 @@ skaffold dev
 
 This command will build and deploy the application to the Minikube cluster. Skaffold will automatically watch for changes in your code and redeploy the application as needed.
 
+
+6. Once the application is deployed, run the following command for each service to forward its port to your local machine:
+
+kubectl port-forward svc/[service-name] [port-number]:[port-number]
+
+Replace `[service-name]` with the name of the service and `[port-number]` with the port number that the service is running on.
+
+For example, to forward the port for the `web` service running on port `8080`, run the following command:
+
+kubectl port-forward svc/web 8080:8080
 ## Conclusion
 
 By following the instructions provided in this README file, you should now be able to install and run a project using Minikube, Docker Desktop, Skaffold, and WSL2 on your local machine. If you encounter any issues during the installation or running process, please refer to the official documentation for each tool or seek help from the community.
+
+
+
+
