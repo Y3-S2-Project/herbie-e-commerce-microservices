@@ -1,6 +1,6 @@
 import asyncHandler from "../middleware/async.js";
 import Cart from "../models/cart.model.js";
-
+import Product from "../models/product.model.js";
 //Create new shopping cart
 const createCart = asyncHandler(async (req, res) => {
   const { userId, products } = req.body;
@@ -29,14 +29,35 @@ const createCart = asyncHandler(async (req, res) => {
 });
 
 //Get shopping cart by user id
+// const getCartByUserId = asyncHandler(async (req, res) => {
+//   try {
+//     const cart = await Cart.findOne({ userId: req.params.userId }).populate(
+//       "products.product"
+//     );
+
+//     if (cart) {
+//       res.status(200).json(cart);
+//     } else {
+//       res.status(404).json({ message: "Cart not found" });
+//     }
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+//new get shooping cart by user id
 const getCartByUserId = asyncHandler(async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userId: req.params.userId }).populate(
-      "products.product"
-    );
+    const cart = await Cart.findOne({ userId: req.params.userId });
 
     if (cart) {
-      res.status(200).json(cart);
+      const products = await Promise.all(
+        cart.products.map(async (item) => {
+          const product = await Product.findById(item.product);
+          return { product, quantity: item.quantity };
+        })
+      );
+
+      res.status(200).json({ ...cart.toJSON(), products });
     } else {
       res.status(404).json({ message: "Cart not found" });
     }

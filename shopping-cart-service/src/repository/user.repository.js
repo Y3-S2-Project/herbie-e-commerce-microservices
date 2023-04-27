@@ -48,8 +48,7 @@ export const getAllUsers = async ({
 
 export const getOneUser = async (filters, returnPassword = false) => {
   const user = await User.findOne(filters)
-    .populate("buyer seller admin")
-    .lean();
+  .lean();
   if (!user) return null;
 
   if (!returnPassword) delete user.password;

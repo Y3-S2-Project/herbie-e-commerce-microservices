@@ -1,10 +1,6 @@
 import mongoose from "mongoose";
-import userSchema from "./models/user.model.js";
-import productSchema from "./models/product.model.js";
 
-// Register the schemas
-mongoose.model("User", userSchema);
-mongoose.model("Product", productSchema);
+
 
 const orderSchema = new mongoose.Schema(
   {
