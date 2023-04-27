@@ -27,11 +27,10 @@ RUN yarn
 # Copy app files
 COPY . .
 
-# Build production app
-RUN yarn run build
+
 
 # Expose app port
 EXPOSE 3001
 
 # Start app
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]
