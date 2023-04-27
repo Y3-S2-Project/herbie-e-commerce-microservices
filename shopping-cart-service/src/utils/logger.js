@@ -1,5 +1,6 @@
 import winston from 'winston'
 
+//stacktrace format for error
 const stacktrace = winston.format((info) => {
   if (info instanceof Error) {
     return Object.assign({}, info, {
@@ -10,6 +11,7 @@ const stacktrace = winston.format((info) => {
   return info
 })
 
+//logger
 const logger = winston.createLogger({
   format: winston.format.combine(stacktrace(), winston.format.timestamp(), winston.format.json(), winston.format.prettyPrint()),
   transports: [

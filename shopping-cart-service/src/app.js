@@ -14,7 +14,7 @@ app.get("/", (req, res) =>
 app.use("/api", routes);
 connectDB();
 
-// Start the server
+// start shopping cart service
 const port = process.env.PORT || 3007;
 app.listen(port, () => {
   console.log(`Shopping Cart Service successfully started on port ${port}`);

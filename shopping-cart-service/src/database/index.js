@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import logger from "../utils/logger";
-
+// connect to MongoDB
 const connectDB = async () => {
   mongoose
     .connect(process.env.MONGO_URI, { keepAlive: true, connectTimeoutMS: 3000 })
