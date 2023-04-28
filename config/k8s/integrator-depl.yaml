@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: integrator-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: integrator
+  template:
+    metadata:
+      labels:
+        app: integrator
+    spec:
+      containers:
+        - name: integrator
+          image: chamathjayasekarahtwondevops/integrator
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: integrator-service
+spec:
+  selector:
+    app: integrator
+  type: ClusterIP
+  ports:
+    - name: integrator
+      port: 8000
+      targetPort: 8000
