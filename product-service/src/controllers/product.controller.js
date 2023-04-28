@@ -1,121 +1,72 @@
 import Product from "../models/product.model";
 import Seller from "../models/seller.model";
 import asyncHandler from "../middleware/async.js";
-import { v4 as uuidv4 } from "uuid";
+
 import { makeResponse } from "../utils/response";
+import {
+  getAllProductOnSaleService,
+  createSellerProductService,
+  deleteProductService,
+  updateProductService,
+  updateVisibleStatusService,
+  getAllProductsService,
+  getSingleProductService,
+} from "../services/product.service.js";
 
 export const getAllProduct = asyncHandler(async (req, res) => {
-
   try {
     // get all products
-    let Products = null;
+    let result = null;
     // if user is logged in and is a seller, get only his products
     if (req?.user) {
-      Products = await Product.find({ pSeller: req?.user?.seller._id }).sort({
-        _id: -1,
-      });
+      result = await getAllProductsService(req?.user?.seller._id);
       // if user is not logged in, get all products
-    } else Products = await Product.find().sort({ _id: -1 });
+    } else result = await getAllProductsService();
     // if products are found, return them
-    if (Products) {
-      makeResponse({
+    if (result?.status == 200) {
+      return makeResponse({
         res,
         status: 200,
-        data: Products,
+        data: result.data,
         success: "All Products",
       });
     }
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ error: "Error retrieving product" });
   }
 });
 
-export const getProductCount = async () => {
-  try {
-    // get all products count
-    let count = await Product.count();
-    return count;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 export const postAddProduct = asyncHandler(async (req, res) => {
   const { seller } = req.user;
-
-  // create a new product object with any relevant data
-  const newProduct = new Product({
-    pPid: `PID${uuidv4()}`,
-    pName: req.body.pName,
-    pDescription: req.body.pDescription,
-    pStatus: req.body.pStatus,
-    pCategory: req.body.pCategory,
-    pQuantity: req.body.pQuantity,
-    pPrice: req.body.pPrice,
-    pOffer: req.body.pOffer,
-    pWeight: req.body.pWeight,
-    pImages: req.body.pImages,
-    pSeller: seller._id,
- 
-  });
+  console.log(seller.id);
   try {
-    // save the new product
-    const product = await new Product(newProduct).save();
-    if (product) {
-      // once the new product is saved successfully, add it to the seller's product list
-      Seller.findOneAndUpdate(
-        { _id: seller._id },
-        { $push: { products: newProduct._id } },
-        { new: true },
-        (err, updatedSeller) => {
-          if (err) {
-            console.log(err);
-            // handle any errors that occur
-            return res.status(500).json({ error: "Error updating seller" });
-          }
+    const result = await createSellerProductService(req.body, seller._id);
 
-          // return a success response with the updated seller object
-          return res
-            .status(200)
-            .json({ success: "Product created successfully" });
-        }
-      );
-    }
+    if (result)
+      return res.status(201).json({ success: "Product created successfully" });
   } catch (err) {
     console.log(err);
     // handle any errors that occur
-    return res.status(500).json({ error: "Error creating product" });
+    return res.status(500).json({ error: "Error retrieving product" });
   }
 });
 
 export const getDeleteProduct = asyncHandler(async (req, res) => {
   // get the seller from the request object
   const { seller } = req.user;
+  console.log(seller);
   // get the product id from the request params
   const { id } = req.params;
 
   try {
     // find the product by id and delete it
-    const product = await Product.findByIdAndDelete(id);
-    if (product) {
+    const result = await deleteProductService(seller._id, id);
+    if (result.status == 500) {
       // once the product is deleted successfully, remove it from the seller's product list
-      Seller.findOneAndUpdate(
-        { _id: seller._id },
-        { $pull: { products: id } },
-        { new: true },
-        (err, updatedSeller) => {
-          if (err) {
-            console.log(err);
-            // handle any errors that occur
-            return res.status(500).json({ error: "Error updating seller" });
-          }
-
-          // return a success response with the updated seller object
-          return res
-            .status(200)
-            .json({ success: "Product deleted successfully" });
-        }
-      );
+      return res.status(500).json({ error: "Error updating seller" });
+    } else if (result.status == 200) {
+      return res.status(200).json({ success: "Product deleted successfully" });
     }
   } catch (err) {
     console.log(err);
@@ -127,26 +78,28 @@ export const getDeleteProduct = asyncHandler(async (req, res) => {
 export const editProduct = asyncHandler(async (req, res) => {
   try {
     // find the product by id and update it
-    const productToBeEdited = await Product.findOne({ pPid: req.body.pPid });
-    if (productToBeEdited) {
-      productToBeEdited.pName = req.body.pName;
-      productToBeEdited.pDescription = req.body.pDescription;
-      productToBeEdited.pStatus = req.body.pStatus;
-      productToBeEdited.pCategory = req.body.pCategory;
-      productToBeEdited.pQuantity = req.body.pQuantity;
-      productToBeEdited.pPrice = req.body.pPrice;
-      productToBeEdited.pOffer = req.body.pOffer;
-      productToBeEdited.pWeight = req.body.pWeight;
-      productToBeEdited.pImages = req.body.pImages;
+    let productToBeEdited = undefined;
+    productToBeEdited.pName = req.body.pName;
+    productToBeEdited.pDescription = req.body.pDescription;
+    productToBeEdited.pStatus = req.body.pStatus;
+    productToBeEdited.pCategory = req.body.pCategory;
+    productToBeEdited.pQuantity = req.body.pQuantity;
+    productToBeEdited.pPrice = req.body.pPrice;
+    productToBeEdited.pOffer = req.body.pOffer;
+    productToBeEdited.pWeight = req.body.pWeight;
+    productToBeEdited.pImages = req.body.pImages;
 
-      const updatedProduct = await productToBeEdited.save();
- // return a success response with the updated product object
+    const result = await updateProductService(req.body.pPid, productToBeEdited);
+    if (result?.status == 201) {
+      // return a success response with the updated product object
       return res.json({
         success: "Product edit successfully",
-        product: updatedProduct,
+        product: result?.data,
       });
-    } else {
+    } else if (result?.status == 404) {
       return res.status(404).json({ error: "Product not found" });
+    } else if (result?.status == 500) {
+      return res.status(500).json({ error: "Error Editing product" });
     }
   } catch (err) {
     console.log(err);
@@ -157,15 +110,19 @@ export const editProduct = asyncHandler(async (req, res) => {
 export const getAllProductOnSale = asyncHandler(async (req, res) => {
   try {
     // get all products where sale state is true
-    let Products = await Product.find({ pSaleStatus: true }).sort({ _id: -1 });
-   // if products are found, return them
-    if (Products) {
+    let result = await getAllProductOnSaleService();
+    // if products are found, return them
+    if (result.status == 200) {
       makeResponse({
         res,
         status: 200,
-        data: Products,
+        data: result.data,
         success: "All Products",
       });
+    } else if (result?.status == 404) {
+      res.status(404).json({ error: "No on sale products" });
+    } else if (result?.status == 500) {
+      res.status(500).json({ error: "Error finding products" });
     }
   } catch (err) {
     console.log(err);
@@ -175,14 +132,18 @@ export const getAllProductOnSale = asyncHandler(async (req, res) => {
 export const getSingleProduct = asyncHandler(async (req, res) => {
   try {
     // get the product with the specified pPid
-    let Products = await Product.find({ pPid: req.params.id });
-    if (Products) {
+    let result = await getSingleProductService(req.params.id);
+    if (result?.status == 200) {
       makeResponse({
         res,
         status: 200,
-        data: Products,
+        data: result.data,
         success: "All Products",
       });
+    } else if (result?.status == 404) {
+      res.status(404).json({ error: "No on sale products" });
+    } else if (result?.status == 500) {
+      res.status(500).json({ error: "Error finding products" });
     }
   } catch (err) {
     console.log(err);
@@ -191,24 +152,19 @@ export const getSingleProduct = asyncHandler(async (req, res) => {
 
 //update visible status
 export const updateVisibleStatus = asyncHandler(async (req, res) => {
-
   try {
     // Find the product with the specified pPid
-    let product = await Product.findOne({ pPid: req.body.pPid });
+    let result = await updateVisibleStatusService(req.body.pPid);
 
     // If the product exists, update its pVisible field to true
-    if (product) {
-      // Update the product's pVisible field
-      product.pVisible = true;
-      // Save the updated product
-      let updatedProduct = await product.save();
+    if (result?.status == 200) {
       makeResponse({
         res,
         status: 200,
-        data: updatedProduct,
+        data: result.data.data,
         success: "Product updated successfully",
       });
-    } else {
+    } else if (result?.status == 404) {
       makeResponse({
         res,
         status: 404,

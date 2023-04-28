@@ -149,61 +149,10 @@ export default function SideBar(props) {
               {!props.isActive ? <small> Settings</small> : <small> </small>}
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                isActive ? 'font-color side-link selected' : 'font-color side-link '
-              }
-            >
-              <i className="fas fa-wrench"></i>
-              {!props.isActive ? <small> Settings</small> : <small> </small>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                isActive ? 'font-color side-link selected' : 'font-color side-link '
-              }
-            >
-              <i className="fas fa-wrench"></i>
-              {!props.isActive ? <small> Settings</small> : <small> </small>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                isActive ? 'font-color side-link selected' : 'font-color side-link '
-              }
-            >
-              <i className="fas fa-wrench"></i>
-              {!props.isActive ? <small> Settings</small> : <small> </small>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                isActive ? 'font-color side-link selected' : 'font-color side-link '
-              }
-            >
-              <i className="fas fa-wrench"></i>
-              {!props.isActive ? <small> Settings</small> : <small> </small>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                isActive ? 'font-color side-link selected' : 'font-color side-link '
-              }
-            >
-              <i className="fas fa-wrench"></i>
-              {!props.isActive ? <small> Settings</small> : <small> </small>}
-            </NavLink>
-          </li>
+      
+
+      
+  
         </ul>
       ) : (
         <ul className="list-unstyled components font-color tw-ml-3">

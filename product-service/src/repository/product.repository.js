@@ -1,200 +1,209 @@
 import Product from "../models/product.model";
 import Seller from "../models/seller.model";
+import asyncHandler from "../middleware/async";
+import { v4 as uuidv4 } from "uuid";
 
-
-export const getAllProducts= async () => {
+export const getAllProductsRepository = async (userId) => {
   try {
-    // find all Products
-    const Products = await Product.find({});
-    return {
-      status: 200,
-      data: Products,
-      message: "All Products retrieved successfully",
-    };
+    // get all products
+    let Products = null;
+    // if user is logged in and is a seller, get only his products
+    if (userId) {
+      Products = await Product.find({ pSeller: userId }).sort({
+        _id: -1,
+      });
+      // if user is not logged in, get all products
+    } else Products = await Product.find().sort({ _id: -1 });
+    // if products are found, return them
+    if (Products) {
+      return {
+        status: 200,
+        data: Products,
+        success: "All Products",
+      };
+    } else {
+      return {
+        status: 404,
+        error: "Products not found",
+      };
+    }
   } catch (err) {
-    console.error(
-      `An error occurred when retrieving all Products - err: ${err.message}`
-    );
-    return {
-      status: 500,
-      message: "Could not retrieve all Products",
-    };
+    console.log(err);
+  }
+};
+export const getProductCount = async () => {
+  try {
+    // get all products count
+    let count = await Product.count();
+    return count;
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const createProductRepository = async (ProductData, sellerId) => {
+  // create a new product object with any relevant data
+  ProductData.pPid = `PID${uuidv4()}`;
+  ProductData.pSeller = sellerId;
+  try {
+    // save the new product
+    const product = await new Product(ProductData).save();
+    if (product) {
+      // once the new product is saved successfully, add it to the seller's product list
+      Seller.findOneAndUpdate(
+        { _id: sellerId },
+        { $push: { products: ProductData._id } },
+        { new: true },
+        (err, updatedSeller) => {
+          if (err) {
+            console.log(err);
+            // handle any errors that occur
+            return { status: 500, error: "Error updating seller" };
+          }
+
+          // return a success response with the updated seller object
+          return { status: 200, success: "Product created successfully" };
+        }
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    // handle any errors that occur
+    return { status: 500, error: "Error creating product" };
   }
 };
 
-export const getProductById = async (Product_id) => {
+export const getDeleteProductRepository = async (sellerId, productId) => {
   try {
-    // find Product by id
-    const Product = await Product.findById(Product_id);
-    if (!Product) {
-      return {
-        status: 404,
-        message: "Product not found",
-      };
+    console.log(sellerId, productId);
+    // find the product by id and delete it
+    const product = await Product.findByIdAndDelete(productId);
+    if (product) {
+      // once the product is deleted successfully, remove it from the seller's product list
+      Seller.findOneAndUpdate(
+        { _id: sellerId },
+        { $pull: { products: productId } },
+        { new: true },
+        (err, updatedSeller) => {
+          if (err) {
+            console.log(err);
+            // handle any errors that occur
+            return { status: 500, error: "Error updating seller" };
+          }
+
+          // return a success response with the updated seller object
+          return {
+            status: 200,
+
+            success: "Product deleted sucessfully",
+          };
+        }
+      );
     }
-    return {
-      status: 200,
-      data: Product,
-      message: "Product retrieved successfully",
-    };
   } catch (err) {
-    console.error(
-      `An error occurred when retrieving a Product by id - err: ${err.message}`
-    );
-    return {
-      status: 500,
-      message: "Could not retrieve the Product",
-    };
+    console.log(err);
+    // handle any errors that occur
+    return { status: 500, error: "Error deleting product" };
   }
 };
 
-export const getProducts = async (ProductData) => {
-
+export const getAllProductOnSaleRepository = async () => {
   try {
-    // find Products by ProductData
-    const Products = await Product.find(ProductData)
-    if (!Products) {
+    // get all products where sale state is true
+    let Products = await Product.find({ pSaleStatus: true }).sort({ _id: -1 });
+    // if products are found, return them
+    if (Products) {
+      return {
+        status: 200,
+        data: Products,
+        success: "All Products",
+      };
+    } else {
       return {
         status: 404,
-        message: "Products not found",
+        error: "No on sale products",
       };
     }
-    return {
-      status: 200,
-      data: Products,
-      message: "Products retrieved successfully",
-    };
   } catch (err) {
-    console.error(
-      `An error occurred when retrieving Products - err: ${err.message}`
-    );
+    console.log(err);
+
     return {
       status: 500,
-      message: "Could not retrieve the Products",
+      error: "Error finding products",
     };
   }
 };
-
-export const createProduct = async (ProductData) => { 
+export const editProductRepository = async (pPid, productData) => {
   try {
-    //check if the seller exists
-    const newProduct = await Product.create(ProductData);
+    // find the product by id and update it
+    const productToBeEdited = await Product.findOne({ pPid: pPid });
+    if (productToBeEdited) {
+      productToBeEdited.pName = productData.pName;
+      productToBeEdited.pDescription = productData.pDescription;
+      productToBeEdited.pStatus = productData.pStatus;
+      productToBeEdited.pCategory = productData.pCategory;
+      productToBeEdited.pQuantity = productData.pQuantity;
+      productToBeEdited.pPrice = productData.pPrice;
+      productToBeEdited.pOffer = productData.pOffer;
+      productToBeEdited.pWeight = productData.pWeight;
+      productToBeEdited.pImages = productData.pImages;
 
-    await Seller.updateOne(
-      { _id: newProduct.seller },
-      { $push: { sellerProducts: newProduct._id } }
-    );
-    return {
-      status: 201,
-      data: newProduct,
-      message: "Seller Product created successfully",
-    };
-  } catch (err) {
-    console.error(
-      `An error occurred when creating a seller Product - err: ${err.message}`
-    );
-    return {
-      status: 500,
-      message: "Could not create the seller Product",
-    };
-  }
-}
-
-
-
-export const deleteProduct= async (Product_id) => {
-  try {
-    // find Product by id
-    const deletedProduct = await Product.findByIdAndDelete(Product_id);
-    //check if the Product exists
-    if (!deletedProduct) {
+      const updatedProduct = await productToBeEdited.save();
+      // return a success response with the updated product object
       return {
-        status: 404,
-        message: "Product not found",
+        success: "Product edit successfully",
+        product: updatedProduct,
+        status: 201,
       };
+    } else {
+      return { status: 404, error: "Product not found" };
     }
-    // remove the Product from the seller's sProducts array
-    await Seller.updateOne(
-      { _id: deletedProduct.seller },
-      { $pull: { sellerProducts: deletedProduct._id } }
-    );
-    // delete all reviews of the Product
-    return {
-      status: 200,
-      data: deletedProduct,
-      message: "Seller Product deleted successfully",
-    };
   } catch (err) {
-    console.error(
-      `An error occurred when deleting a seller Product - err: ${err.message}`
-    );
-    return {
-      status: 500,
-      message: "Could not delete the seller Product",
-    };
+    console.log(err);
+    return { status: 500, error: "Error editing product" };
+  }
+};
+export const getSingleProductRepository = async (pPid) => {
+  try {
+    // get the product with the specified pPid
+    let Products = await Product.find({ pPid: pPid });
+    if (Products) {
+      return {
+        status: 200,
+        data: Products,
+        success: "All Products",
+      };
+    } else {
+      return { status: 404, error: "Product not found" };
+    }
+  } catch (err) {
+    return { status: 500, error: "Error editing product" };
   }
 };
 
-
-
-export const updateSellerProduct= async (
-  Product_id,
-  user_id,
-  ProductData
-) => {
+//update visible status
+export const updateVisibleStatusRepository = async (pPid) => {
   try {
-    // find Product by id
-    const Product = await Product.findById(Product_id);
-    //check if the Product exists
-    if (!Product) {
+    // Find the product with the specified pPid
+    let product = await Product.findOne({ pPid: pPid });
+
+    // If the product exists, update its pVisible field to true
+    if (product) {
+      // Update the product's pVisible field
+      product.pVisible = true;
+      // Save the updated product
+      let updatedProduct = await product.save();
+      return {
+        status: 200,
+        data: updatedProduct,
+        success: "Product updated successfully",
+      };
+    } else {
       return {
         status: 404,
-        message: "Product not found",
+        error: "Product not found",
       };
     }
-    //check if the user created the Product
-    if (Product.user.toString() !== user_id) {
-      return {
-        status: 401,
-        message: "User not authorized",
-      };
-    }
-    //check if the seller exists
-    const seller = await Seller.findById(Product.seller);
-    if (!seller) {
-      return {
-        status: 404,
-        message: "Seller not found",
-      };
-    }
-    //check if the Product exists in the seller's sellerProducts array
-    const existingProduct = seller.sellerProducts.find(
-      (r) => r.toString() === Product_id
-    );
-    if (!existingProduct) {
-      return {
-        status: 404,
-        message: "Product not found for this seller",
-      };
-    }
-    //update the Product
-    const updatedProduct = await Product.findByIdAndUpdate(
-      Product_id,
-      ProductData,
-      { new: true }
-    );
-    return {
-      status: 200,
-      data: updatedProduct,
-      message: "Seller Product updated successfully",
-    };
-  } catch (err) {
-    console.error(
-      `An error occurred when updating a seller Product - err: ${err.message}`
-    );
-    return {
-      status: 500,
-      message: "Could not update the seller Product",
-    };
+  } catch (error) {
+    return { status: 500, error: "Error editing product" };
   }
 };
