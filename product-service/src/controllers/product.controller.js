@@ -78,16 +78,19 @@ export const getDeleteProduct = asyncHandler(async (req, res) => {
 export const editProduct = asyncHandler(async (req, res) => {
   try {
     // find the product by id and update it
-    let productToBeEdited = undefined;
-    productToBeEdited.pName = req.body.pName;
-    productToBeEdited.pDescription = req.body.pDescription;
-    productToBeEdited.pStatus = req.body.pStatus;
-    productToBeEdited.pCategory = req.body.pCategory;
-    productToBeEdited.pQuantity = req.body.pQuantity;
-    productToBeEdited.pPrice = req.body.pPrice;
-    productToBeEdited.pOffer = req.body.pOffer;
-    productToBeEdited.pWeight = req.body.pWeight;
-    productToBeEdited.pImages = req.body.pImages;
+    let productToBeEdited = {
+    pName : req.body.pName,
+    pDescription : req.body.pDescription,
+    pStatus : req.body.pStatus,
+    pCategory : req.body.pCategory,
+    pQuantity : req.body.pQuantity,
+    pPrice : req.body.pPrice,
+    pOffer : req.body.pOffer,
+    pWeight : req.body.pWeight,
+    pImages : req.body.pImages,
+
+
+    }
 
     const result = await updateProductService(req.body.pPid, productToBeEdited);
     if (result?.status == 201) {

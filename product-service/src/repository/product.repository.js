@@ -51,7 +51,7 @@ export const createProductRepository = async (ProductData, sellerId) => {
       // once the new product is saved successfully, add it to the seller's product list
       Seller.findOneAndUpdate(
         { _id: sellerId },
-        { $push: { products: ProductData._id } },
+        { $push: { products: product._id } },
         { new: true },
         (err, updatedSeller) => {
           if (err) {
@@ -134,6 +134,7 @@ export const getAllProductOnSaleRepository = async () => {
 };
 export const editProductRepository = async (pPid, productData) => {
   try {
+ 
     // find the product by id and update it
     const productToBeEdited = await Product.findOne({ pPid: pPid });
     if (productToBeEdited) {
