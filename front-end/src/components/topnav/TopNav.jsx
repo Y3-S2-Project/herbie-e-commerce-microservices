@@ -128,9 +128,7 @@ function TopNav() {
 
             <div className="collapse nav-categories" id="categories-menu">
               <ul className="list-unstyled">
-                <li>
-                  <NavLink to="/orderview">My Orders</NavLink>
-                </li>
+           
                 <li>
                   <NavLink to="/category2">Category 2</NavLink>
                 </li>
@@ -150,12 +148,6 @@ function TopNav() {
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          {/*<Nav className="me-auto">*/}
-          {/*  <Nav.Link href="/">Home</Nav.Link>*/}
-          {/*  <Nav.Link href="/about">About</Nav.Link>*/}
-          {/*  <Nav.Link href="/buyers">Buyers</Nav.Link>*/}
-          {/*  <Nav.Link href="#contact-us">Contact</Nav.Link>*/}
-          {/*</Nav>*/}
 
           {!localStorage.getItem('token') && (
             <Nav className="m-auto me-0">
@@ -215,6 +207,16 @@ function TopNav() {
                         </a>
                       )}
                     </li>
+                    <liv>
+                         {localStorage.getItem('role') === 'BUYER' ? (
+                        <a className="dropdown-item" href="/user/orderview">
+                          MY Orders
+                        </a>
+              
+                      ) : (
+                     ''
+                      )}
+                    </liv>
                     <li>
                       <a className="dropdown-item" href="#">
                         Setting

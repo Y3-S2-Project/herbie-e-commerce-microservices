@@ -26,7 +26,7 @@ export const loginUser = async ({ email, password }) => {
 };
 // register user service
 export const registerUser = async ({ user, specificData }) => {
-  // check if user exists
+  // encrypt password
   const encryptedPassword = await new Promise((resolve, reject) => {
     bcrypt.hash(
       user.password,
@@ -37,8 +37,7 @@ export const registerUser = async ({ user, specificData }) => {
       }
     );
   });
- // check if user exists
-
+ 
   if (user.role === "BUYER") {
     // create a new buyer
     var newBuyer = await createBuyer(specificData);

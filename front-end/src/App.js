@@ -21,7 +21,7 @@ import {
 } from './views/common'
 import ShoppingCart from './views/shoppingCart/ShoppingCart'
 import ItemView from './views/itemView/ItemView'
-import OrderView from './views/orders/OrderView'
+
 // import ReviewsView from './views/reviews/sellerView/sellerReviewView'
 import Checkout from './views/checkout/Checkout'
 import Payment from './views/checkout/Payment'
@@ -51,7 +51,7 @@ function App() {
           <Route path="/registration" name="Register" element={<Register />} />
           <Route path="/shoppingcart" name="ShoppingCart" element={<ShoppingCart />} />
           <Route path="/all-products" name="ItemView" element={<ItemView />} />
-          <Route path="/orderview" name="OrderView" element={<OrderView />} />
+    
           <Route path="/productview/:id" name="ProductView" element={<ProductView />} />
           <Route path="/checkout" name="Checkout" element={<Checkout />} />
           <Route path="/payment" name="Payment" element={<Payment />} />

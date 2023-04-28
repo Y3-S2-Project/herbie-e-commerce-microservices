@@ -89,6 +89,14 @@ build:
         manual:
           - dest: .
             src: "src/**/*.js"
+    - image: chamathjayasekarahtwondevops/integrator
+      context: integrator-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"        
 
 manifests:
   rawYaml:

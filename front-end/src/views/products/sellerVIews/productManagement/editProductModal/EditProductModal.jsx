@@ -70,8 +70,8 @@ const EditProductModal = (props) => {
 
   const submitForm = async (e) => {
     e.preventDefault()
-    if (editformData.pImages < 2) {
-      console.log('Image Not upload=============', editformData)
+    if (editformData.pImages > 1) {
+      console.log('UploaImage ')
     } else {
       console.log('Image uploading')
     }
@@ -265,7 +265,7 @@ const EditProductModal = (props) => {
             <div className="tw-flex tw-space-x-1 tw-py-4">
               <div className="tw-flex tw-w-1/2  tw-flex-col tw-mt-4">
                 <label htmlFor="image">Product Images *</label>
-                <span className="tw-text-gray-600 tw-text-xs">Must need 2 images</span>
+                <span className="tw-text-gray-600 tw-text-xs">Must need 1 image</span>
                 {imageAdded && (
                   <div className="tw-mt-3">
                     {editformData.pImages.map((image, index) => (

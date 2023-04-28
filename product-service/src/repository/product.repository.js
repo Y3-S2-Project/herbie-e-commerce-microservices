@@ -44,6 +44,7 @@ export const createProductRepository = async (ProductData, sellerId) => {
   // create a new product object with any relevant data
   ProductData.pPid = `PID${uuidv4()}`;
   ProductData.pSeller = sellerId;
+  if (ProductData.pOffer > 0) ProductData.pSaleStatus = true;
   try {
     // save the new product
     const product = await new Product(ProductData).save();
@@ -61,9 +62,11 @@ export const createProductRepository = async (ProductData, sellerId) => {
           }
 
           // return a success response with the updated seller object
-          return { status: 200, success: "Product created successfully" };
+          return { status: 201, success: "Product created successfully" };
         }
       );
+      return { status: 201, success: "Product created successfully" };
+      console.log(product);
     }
   } catch (err) {
     console.log(err);
@@ -99,6 +102,11 @@ export const getDeleteProductRepository = async (sellerId, productId) => {
         }
       );
     }
+    return {
+      status: 200,
+
+      success: "Product deleted sucessfully",
+    };
   } catch (err) {
     console.log(err);
     // handle any errors that occur
@@ -109,7 +117,10 @@ export const getDeleteProductRepository = async (sellerId, productId) => {
 export const getAllProductOnSaleRepository = async () => {
   try {
     // get all products where sale state is true
-    let Products = await Product.find({ pSaleStatus: true }).sort({ _id: -1 });
+    let Products = await Product.find({
+      pSaleStatus: true,
+      pVisible: true,
+    }).sort({ _id: -1 });
     // if products are found, return them
     if (Products) {
       return {
@@ -134,7 +145,6 @@ export const getAllProductOnSaleRepository = async () => {
 };
 export const editProductRepository = async (pPid, productData) => {
   try {
- 
     // find the product by id and update it
     const productToBeEdited = await Product.findOne({ pPid: pPid });
     if (productToBeEdited) {

@@ -5,7 +5,7 @@ FROM node:16.13.1
 WORKDIR /app
 
 # Set environment variables
-ENV PORT=3002 \
+ENV PORT=3011 \
     MONGO_URI=mongodb+srv://chamath:chamath@clusterx.kanecsb.mongodb.net/?retryWrites=true&w=majority \
     JWT_EXPIRE=30 \
     NODE_ENV=development \
@@ -14,7 +14,7 @@ ENV PORT=3002 \
     MAIL_HOST= \
     MAIL_USER= \
     MAIL_PASSWORD= \
-    APP_DOMAIN=http://localhost:3002 \
+    APP_DOMAIN=http://localhost:3011 \
     USER=tl685998@gmail.com \
     PASSWORD=vrlaqcyqjufvwibc \
     SEND_TO= \
@@ -31,7 +31,7 @@ COPY . .
 RUN yarn run build
 
 # Expose app port
-EXPOSE 3002
+EXPOSE 3011
 
 # Start app
 CMD ["yarn", "dev"]

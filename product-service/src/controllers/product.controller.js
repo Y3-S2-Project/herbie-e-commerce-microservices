@@ -39,16 +39,16 @@ export const getAllProduct = asyncHandler(async (req, res) => {
 
 export const postAddProduct = asyncHandler(async (req, res) => {
   const { seller } = req.user;
-  console.log(seller.id);
+  console.log(seller._id);
   try {
     const result = await createSellerProductService(req.body, seller._id);
 
-    if (result)
+    if (result?.status == 201)
       return res.status(201).json({ success: "Product created successfully" });
   } catch (err) {
     console.log(err);
     // handle any errors that occur
-    return res.status(500).json({ error: "Error retrieving product" });
+    return res.status(500).json({ error: "Error creating product" });
   }
 });
 
@@ -79,18 +79,16 @@ export const editProduct = asyncHandler(async (req, res) => {
   try {
     // find the product by id and update it
     let productToBeEdited = {
-    pName : req.body.pName,
-    pDescription : req.body.pDescription,
-    pStatus : req.body.pStatus,
-    pCategory : req.body.pCategory,
-    pQuantity : req.body.pQuantity,
-    pPrice : req.body.pPrice,
-    pOffer : req.body.pOffer,
-    pWeight : req.body.pWeight,
-    pImages : req.body.pImages,
-
-
-    }
+      pName: req.body.pName,
+      pDescription: req.body.pDescription,
+      pStatus: req.body.pStatus,
+      pCategory: req.body.pCategory,
+      pQuantity: req.body.pQuantity,
+      pPrice: req.body.pPrice,
+      pOffer: req.body.pOffer,
+      pWeight: req.body.pWeight,
+      pImages: req.body.pImages,
+    };
 
     const result = await updateProductService(req.body.pPid, productToBeEdited);
     if (result?.status == 201) {

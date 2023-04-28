@@ -41,7 +41,7 @@ export default function SideBar(props) {
               aria-expanded="false"
             >
               <i className="fa fa-users" aria-hidden="true"></i>
-              {!props.isActive ? <small> Item Management</small> : <small> </small>}
+              {!props.isActive ? <small> Product Management</small> : <small> </small>}
             </a>
             <ul className="collapse list-unstyled font-color" id="customer">
               <li>
@@ -52,7 +52,7 @@ export default function SideBar(props) {
                   }
                 >
                   <i className="fas fa-user"></i>
-                  {!props.isActive ? <small>All Items</small> : <small> </small>}
+                  {!props.isActive ? <small>All Products</small> : <small> </small>}
                 </NavLink>
               </li>
             </ul>
@@ -182,29 +182,18 @@ export default function SideBar(props) {
               aria-expanded="false"
             >
               <i className="fa fa-users" aria-hidden="true"></i>
-              {!props.isActive ? <small> Customers</small> : <small> </small>}
+              {!props.isActive ? <small> My Orders </small> : <small> </small>}
             </a>
             <ul className="collapse list-unstyled font-color" id="customer">
               <li>
                 <NavLink
-                  to="./new-customer"
+                  to="./orderview"
                   className={({ isActive }) =>
                     isActive ? 'font-color side-link selected' : 'font-color side-link '
                   }
                 >
                   <i className="fas fa-user"></i>
-                  {!props.isActive ? <small> New Customer</small> : <small> </small>}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="./all-customer"
-                  className={({ isActive }) =>
-                    isActive ? 'font-color side-link selected' : 'font-color side-link '
-                  }
-                >
-                  <i className="fa fa-users" aria-hidden="true"></i>
-                  {!props.isActive ? <small> All Customers</small> : <small> </small>}
+                  {!props.isActive ? <small> Orders</small> : <small> </small>}
                 </NavLink>
               </li>
             </ul>

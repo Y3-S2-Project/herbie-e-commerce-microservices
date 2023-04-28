@@ -24,7 +24,7 @@ export default function OrderView() {
 
   return (
     <>
-      <TopNav />
+
       <Container>
         <h1 className="tw-font-bold tw-text-2xl order-title">My Orders</h1>
         <Row className="tw-mt-5 tw-row tw-g-4">

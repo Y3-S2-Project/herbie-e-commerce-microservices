@@ -70,6 +70,7 @@ export const createProduct = async (product) => {
     }
 
     const response = await axiosInstance.post('/product/add-product', requestBody)
+    console.log(response.data)
     return response.data
   } catch (error) {
     console.log(error)
