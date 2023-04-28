@@ -1,149 +1,85 @@
-import Order from "../models/order.model.js";
-import asyncHandler from "../middleware/async.js";
-import Product from "../models/product.model.js";
-import User from "../models/user.model.js";
-//Create new order
-const createOrder = asyncHandler(async (req, res) => {
-  // create a new order
-  const newOrder = new Order(req.body);
-  try {
-    // get the current highest order ID from the database
-    const orderCount = await Order.count();
-    newOrder.orderId = "OID00" + (parseInt(orderCount) + 1);
-    try {
-      // save the order to the database
-      const savedOrder = await newOrder.save();
-      res.status(201).json(savedOrder);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-});
-//Get all orders
-const getAllOrders = asyncHandler(async (req, res) => {
-  // get the order ID from the query
-  const orderId = req.query?.orderId || null;
-  try {
-    // get all orders from the database
-    let orders;
-    if (orderId) {
-      orders = await Order.find({ orderId });
-    } else {
-      orders = await Order.find();
-    }
+import asyncHandler from "../middleware/async";
+import { makeResponse } from "../utils/response";
+import {
+  createOrderService,
+  getAllOrdersService,
+  getOrderByIdService,
+  updateOrderStatusService,
+  deleteOrderService,
+} from "../services/order.services";
 
-    const ordersArray = [];
-
-    for (let i = 0; i < orders.length; i++) {
-      const order = orders[i].toObject();
-      const userId = order.userId;
-
-      const user = await User.findById(userId);
-      order.userId = user?.toObject();
-
-      const products = order.products;
-      const newProducts = [];
-
-      for (let j = 0; j < products.length; j++) {
-        const product = await Product.findById(products[j].product);
-        newProducts.push({
-          product: product?.toObject(),
-          quantity: products[j].quantity,
-        });
-      }
-
-      order.products = newProducts;
-
-      ordersArray.push(order);
-    }
-
-    res.status(200).json(ordersArray);
-  } catch (err) {
-    res.status(500).json(err);
-    console.log(err);
-  }
+// create order controller
+export const createOrderController = asyncHandler(async (req, res) => {
+  const response = await createOrderService(req.body);
+  if (!response)
+    return makeResponse({
+      res,
+      status: 500,
+      message: "Could not create the order",
+    });
+  if (response.status) return makeResponse({ res, ...response });
+  return makeResponse({
+    res,
+    status: 200,
+    data: response.data,
+    message: "Order created successfully",
+  });
 });
 
-//Get order by order id
-const getOrderById = asyncHandler(async (req, res) => {
-  try {
-    // get order by order ID
-    const order = await Order.findOne({ orderId: req.params.orderId });
-   // get order by order ID
-    if (order) {
-      const products = await Promise.all(
-        order.products.map(async (item) => {
-          const product = await Product.findById(item.product);
-          return { product, quantity: item.quantity };
-        })
-      );
-
-      res.status(200).json({ ...order.toJSON(), products });
-    } else {
-      res.status(404).json({ message: "Order not found" });
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
+// get order by id controller
+export const getOrderByIdController = asyncHandler(async (req, res) => {
+  const response = await getOrderByIdService(req.params.order_id);
+  if (!response)
+    return makeResponse({
+      res,
+      status: 500,
+      message: "Could not retrieve the order",
+    });
+  if (response.status) return makeResponse({ res, ...response });
+  return makeResponse({
+    res,
+    status: 200,
+    data: response.data,
+    message: "Order retrieved successfully",
+  });
 });
 
-//Update order status
-const updateOrderStatus = asyncHandler(async (req, res) => {
-  try {
-    // update order status
-    const order = await Order.findOne({ orderId: req.params.orderId });
-    if (order) {
-      order.orderStatus = req.body.orderStatus;
-      const updatedOrder = await order.save();
-      res.status(200).json(updatedOrder);
-    } else {
-      res.status(404).json({ message: "Order not found" });
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
+// get orders controller
+export const getOrdersController = asyncHandler(async (req, res) => {
+  console.log("req params: ", req.query);
+  const response = await getAllOrdersService(req.query);
+  if (!response)
+    return makeResponse({
+      res,
+      status: 500,
+      message: "Could not retrieve the orders",
+    });
+  if (response.status) return makeResponse({ res, ...response });
+  return makeResponse({
+    res,
+    status: 200,
+    data: response.data,
+    message: "Orders retrieved successfully",
+  });
 });
 
-//Delete order
-const deleteOrder = asyncHandler(async (req, res) => {
-  try {
-    // delete order
-    const order = await Order.findOne({ orderId: req.params.orderId });
-    if (order) {
-      await order.remove();
-      res.status(200).json({ message: "Order deleted successfully" });
-    } else {
-      res.status(404).json({ message: "Order not found" });
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
+// update order status controller
+export const updateOrderStatusController = asyncHandler(async (req, res) => {
+  const response = await updateOrderStatusService(
+    req.params.order_id,
+    req.body
+  );
+  if (!response)
+    return makeResponse({
+      res,
+      status: 500,
+      message: "Could not update the order status",
+    });
+  if (response.status) return makeResponse({ res, ...response });
+  return makeResponse({
+    res,
+    status: 200,
+    data: response.data,
+    message: "Order status updated successfully",
+  });
 });
-
-//Get total sales
-const getTotalSales = asyncHandler(async (req, res) => {
-  try {
-    // get total sales
-    const totalSales = await Order.aggregate([
-      { $group: { _id: null, totalSales: { $sum: "$totalPrice" } } },
-    ]);
-    if (!totalSales) {
-      res.status(400).json({ message: "The order sales cannot be generated" });
-    } else {
-      res.status(200).json({ totalSales: totalSales.pop().totalSales });
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-//Export functions
-module.exports = {
-  createOrder,
-  getAllOrders,
-  getOrderById,
-  updateOrderStatus,
-  deleteOrder,
-  getTotalSales,
-};
