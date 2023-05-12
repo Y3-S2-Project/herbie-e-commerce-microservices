@@ -1,4 +1,4 @@
-# Instructions to Install and Run a Project using Minikube, Docker Desktop, Skaffold, WSL2
+# Instructions to Install and Run this Project using Minikube, Docker Desktop, Skaffold, WSL2
 
 This README file provides step-by-step instructions to install and run a project using Minikube, Docker Desktop, Skaffold, and WSL2 on your local machine.
 
