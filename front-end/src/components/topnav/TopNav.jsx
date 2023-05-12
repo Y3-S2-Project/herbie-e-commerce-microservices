@@ -185,6 +185,21 @@ function TopNav() {
                     )}
                   </Dropdown>
                 </div>
+                    {localStorage.getItem('role') === 'BUYER' ? (
+          <div className="ms-5 me-3 d-flex justify-content">
+            <Link to="/shoppingcart">
+              <div className="cart">
+                <FontAwesomeIcon icon={faShoppingCart} />
+                <span>{noOfItems}</span>
+              </div>
+            </Link>
+            <div className="ms-2">
+              <small className="text-muted fw-bold">Cart</small>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
                 <div className="btn-group ms-5">
                   <button
                     type="button"
@@ -201,27 +216,20 @@ function TopNav() {
                         <a className="dropdown-item" href="/admin/dashboard">
                           Profile
                         </a>
-                      ) : (
-                        <a className="dropdown-item" href="/user/dashboard">
+                      ) : localStorage.getItem('role')=='BUYER' ? (
+                        
+                        <a className="dropdown-item"  href="/user/orderview">
                           Profile
                         </a>
-                      )}
-                    </li>
-                    <liv>
-                         {localStorage.getItem('role') === 'BUYER' ? (
-                        <a className="dropdown-item" href="/user/orderview">
-                          MY Orders
+                        ) : (
+                              <a className="dropdown-item" href="/user/dashboard">
+                          Profile
                         </a>
-              
-                      ) : (
-                     ''
+                            
                       )}
-                    </liv>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Setting
-                      </a>
                     </li>
+             
+        
                     <li>
                       <hr className="dropdown-divider" />
                     </li>
@@ -236,21 +244,7 @@ function TopNav() {
             </div>
           )}
         </Navbar.Collapse>
-        {localStorage.getItem('role') === 'BUYER' ? (
-          <div className="ms-5 me-3 d-flex justify-content">
-            <Link to="/shoppingcart">
-              <div className="cart">
-                <FontAwesomeIcon icon={faShoppingCart} />
-                <span>{noOfItems}</span>
-              </div>
-            </Link>
-            <div className="ms-2">
-              <small className="text-muted fw-bold">Cart</small>
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
+    
       </Container>
     </Navbar>
   )

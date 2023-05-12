@@ -41,7 +41,7 @@ const Checkout = () => {
     form.forEach((value, key) => (formData[key] = value))
     const order = {
       products: cartItems?.products?.map((item) => ({
-        product: item.product._id,
+        product: item.product?._id,
         quantity: item.quantity,
       })),
       totalPrice: cartItems.amount,
@@ -453,7 +453,7 @@ const Checkout = () => {
                         gap: '16px',
                       }}
                     >
-                      <Avatar alt={product.pName} src={product.pImages[0]} />
+                      <Avatar alt={product?.pName} src={product?.pImages[0]} />
                       <Typography
                         sx={{
                           fontSize: '16px',
@@ -461,7 +461,7 @@ const Checkout = () => {
                           color: '#6d6b69',
                         }}
                       >
-                        {product.pName}
+                        {product?.pName}
                       </Typography>
                     </Box>
                     <Typography>X</Typography>

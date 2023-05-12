@@ -15,6 +15,8 @@ spec:
       containers:
         - name: product
           image: chamathjayasekarahtwondevops/product
+          ports:
+            - containerPort: 3003   
 ---
 apiVersion: v1
 kind: Service
