@@ -26,9 +26,31 @@ const deliverySchema = new mongoose.Schema(
       type: String,
       default: "Pending",
     },
-    deliveryAddress: {
+    contactNo: {
       type: String,
       required: true,
+    },
+    deliveryAddress: {
+      houseNo: {
+        type: String,
+        required: true,
+      },
+      street: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      province: {
+        type: String,
+        required: true,
+      },
+      postalCode: {
+        type: String,
+        required: true,
+      },
     },
   },
   { timestamps: true }

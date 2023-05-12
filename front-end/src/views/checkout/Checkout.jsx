@@ -71,7 +71,7 @@ const Checkout = () => {
       <Box
         sx={{
           mx: '100px',
-          mt: '64px',
+          mt: '30px',
         }}
       >
         <Typography
@@ -101,7 +101,7 @@ const Checkout = () => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              mt: '32px',
+              mt: '20px',
             }}
           >
             <Box
@@ -224,7 +224,7 @@ const Checkout = () => {
                     fontSize: '1.5rem',
                     fontWeight: '600',
                     color: '#000',
-                    mt: '76px',
+                    mt: '30px',
                     mb: '32px',
                   }}
                 >
