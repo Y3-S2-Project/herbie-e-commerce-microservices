@@ -19,7 +19,7 @@ import React from 'react'
 import socketIOClient from 'socket.io-client'
 import { Menu, Dropdown, message, Badge } from 'antd'
 
-// export const socket = socketIOClient('http://localhost:3002')
+export const socket = socketIOClient('http://localhost:3002')
 function TopNav() {
   const [noOfItems, setNoOfItems] = React.useState(0)
 
@@ -49,15 +49,15 @@ function TopNav() {
   const [feeds, setFeeds] = useState([])
   const [isNewFeed, setIsNewFeed] = useState(false)
 
-  // useEffect(() => {
-  //   socket.emit('initial_data')
-  //   socket.on('get_data', getData)
-  //   socket.on('change_data', changeData)
-  //   return () => {
-  //     socket.off('get_data')
-  //     socket.off('change_data')
-  //   }
-  // }, [])
+  useEffect(() => {
+    socket.emit('initial_data')
+    socket.on('get_data', getData)
+    socket.on('change_data', changeData)
+    return () => {
+      socket.off('get_data')
+      socket.off('change_data')
+    }
+  }, [])
 
   const getData = (feeds) => {
     if (feeds.length && feeds.some((feed) => feed.read === false)) {
@@ -68,14 +68,14 @@ function TopNav() {
     setFeeds(feeds.filter((feed) => feed.userID === localStorage.getItem('id')))
   }
 
-  // const changeData = () => soc ket.emit('initial_data')
+  const changeData = () => socket.emit('initial_data')
 
   const handleClick = ({ key }) => {
     message.info(`Clicked on item ${key}`)
   }
 
   const handleDropdownClick = () => {
-    // socket.emit('check_all_notifications')
+    socket.emit('check_all_notifications')
   }
 
   const menu = (

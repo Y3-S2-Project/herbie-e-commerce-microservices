@@ -5,6 +5,7 @@ import routes from "./routes/index.routes.js";
 import connectDB from "./database";
 
 const app = express();
+app.use(express.static("public"));
 app.use(cors());
 
 app.use(express.json({ limit: "1mb" }));

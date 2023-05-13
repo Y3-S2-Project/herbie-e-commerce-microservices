@@ -10,6 +10,7 @@ const AdminProductsView = React.lazy(() =>
 )
 const OrderView = React.lazy(() => import('./views/orders/OrderView'))
 const OrderAdminView = React.lazy(() => import('./views/orderAdmin/OrderAdminView'))
+const Commission = React.lazy(() => import('./views/commission/Commission'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
 
@@ -40,6 +41,12 @@ const routes = [
     permissions: 'isAdmin',
   },
   {
+    path: '/commission',
+    name: 'Commission',
+    element: Commission,
+    permissions: 'isAdmin',
+  },
+  {
     path: '/seller-reviews',
     name: 'SellerReviews',
     element: SellerReviews,
@@ -56,7 +63,7 @@ const routes = [
     name: 'OrderView',
     element: OrderView,
     permissions: 'isBuyer',
-  }
+  },
 ]
 
 export default routes
