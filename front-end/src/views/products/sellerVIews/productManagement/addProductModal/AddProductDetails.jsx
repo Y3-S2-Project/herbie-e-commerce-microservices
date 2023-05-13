@@ -359,8 +359,8 @@ const AddProductDetail = () => {
                   <option name="status" value="Available">
                     Available
                   </option>
-                  <option name="status" value="Disabled">
-                    Disabled
+                  <option name="status" value="Out Of Stock">
+                    Out Of Stock
                   </option>
                 </select>
               </div>

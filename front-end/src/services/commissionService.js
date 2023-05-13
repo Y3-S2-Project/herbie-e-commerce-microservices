@@ -1,4 +1,4 @@
-import { axiosInstance as axios } from './core/axios'
+
 
 export const addCommission = async (commission) => {
   return (await axios.post('/commission/', commission)).data

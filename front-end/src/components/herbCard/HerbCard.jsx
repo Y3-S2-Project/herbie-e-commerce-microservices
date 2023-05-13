@@ -67,7 +67,7 @@ export default function HerbCard({ product }) {
         </Row>
         <Row className="mt-1">
           <Col className="mt-3">
-            <Button variant="outline-dark" onClick={() => addItemToCart(product?._id) }>Add +</Button>
+            <Button variant="outline-dark" >Add +</Button>
           </Col>
           <Col className=" ">
             <Row className="">

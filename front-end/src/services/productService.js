@@ -166,7 +166,7 @@ export const confirmProduct = async (pPid) => {
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, update it!',
+      confirmButtonText: 'Yes, Confirm it!',
       cancelButtonText: 'No, cancel!',
       reverseButtons: true,
     })
