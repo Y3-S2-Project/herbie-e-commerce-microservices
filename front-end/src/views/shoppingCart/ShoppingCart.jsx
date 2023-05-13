@@ -43,7 +43,7 @@ export default function ShoppingCart() {
   //remove all items from cart
   const handleRemove = () => {
     axios
-      .delete(`http://localhost:3005/api/cart/${localStorage.getItem('id')}`, config)
+      .delete(`http://localhost:3005/api/cart/${localStorage.getItem('user_id')}`, config)
       .then((response) => {
         console.log('Deleted')
         setCart([])
@@ -57,7 +57,7 @@ export default function ShoppingCart() {
   const handleRemoveProduct = (productId, e) => {
     e.preventDefault()
     axios
-      .delete(`http://localhost:3005/api/cart/${localStorage.getItem('id')}/` + productId, config)
+      .delete(`http://localhost:3005/api/cart/${localStorage.getItem('user_id')}/` + productId, config)
       .then((response) => {
         console.log(response.data)
       })
@@ -69,7 +69,7 @@ export default function ShoppingCart() {
   //get the cart
   useEffect(() => {
     axios
-      .get(`http://localhost:3005/api/cart/${localStorage.getItem('id')}`, config)
+      .get(`http://localhost:3005/api/cart/${localStorage.getItem('user_id')}`, config)
       .then((response) => {
         // console.log(response.data)
         setUserId(response.data.userId)

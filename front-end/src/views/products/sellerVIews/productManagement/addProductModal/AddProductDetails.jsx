@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState, useEffect, useRef } from 'react'
 import { ProductContext } from '../Products'
 import { createProduct, getSellerAllProduct } from '../../../../../services/productService'
-import { getAllCategory } from '../../../../../services/categoryService'
+
 import { Badge } from 'react-bootstrap'
 import { imageUpload, removeImage } from '../../../../../utils/imagesFunctions'
 import { categories } from '../../../../../data/dumyCategories'

@@ -32,8 +32,9 @@ function TopNav() {
   //notification
   const fetchCartCount = () => {
     if (localStorage.getItem('role') === 'BUYER') {
+      const id = localStorage.getItem('user_id')
       axios
-        .get('http://localhost:3005/api/cart/getCartCount/642d7b2fadc38c896ac0a75e', config)
+        .get(`http://localhost:3005/api/cart/getCartCount/${id}`, config)
         .then((response) => {
           setNoOfItems(response.data.count)
         })
