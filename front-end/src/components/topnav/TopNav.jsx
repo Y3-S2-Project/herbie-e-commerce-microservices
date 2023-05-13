@@ -58,7 +58,6 @@ function TopNav() {
       socket.off('change_data')
     }
   }, [])
-  
 
   const getData = (feeds) => {
     if (feeds.length && feeds.some((feed) => feed.read === false)) {
@@ -128,7 +127,6 @@ function TopNav() {
 
             <div className="collapse nav-categories" id="categories-menu">
               <ul className="list-unstyled">
-           
                 <li>
                   <NavLink to="/category2">Category 2</NavLink>
                 </li>
@@ -148,7 +146,6 @@ function TopNav() {
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-
           {!localStorage.getItem('token') && (
             <Nav className="m-auto me-0">
               <Nav.Link href="/login">
@@ -185,21 +182,21 @@ function TopNav() {
                     )}
                   </Dropdown>
                 </div>
-                    {localStorage.getItem('role') === 'BUYER' ? (
-          <div className="ms-5 me-3 d-flex justify-content">
-            <Link to="/shoppingcart">
-              <div className="cart">
-                <FontAwesomeIcon icon={faShoppingCart} />
-                <span>{noOfItems}</span>
-              </div>
-            </Link>
-            <div className="ms-2">
-              <small className="text-muted fw-bold">Cart</small>
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
+                {localStorage.getItem('role') === 'BUYER' ? (
+                  <div className="ms-5 me-3 d-flex justify-content">
+                    <Link to="/shoppingcart">
+                      <div className="cart">
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        <span>{noOfItems}</span>
+                      </div>
+                    </Link>
+                    <div className="ms-2">
+                      <small className="text-muted fw-bold">Cart</small>
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
                 <div className="btn-group ms-5">
                   <button
                     type="button"
@@ -216,20 +213,17 @@ function TopNav() {
                         <a className="dropdown-item" href="/admin/dashboard">
                           Profile
                         </a>
-                      ) : localStorage.getItem('role')=='BUYER' ? (
-                        
-                        <a className="dropdown-item"  href="/user/orderview">
+                      ) : localStorage.getItem('role') == 'BUYER' ? (
+                        <a className="dropdown-item" href="/user/orderview">
                           Profile
                         </a>
-                        ) : (
-                              <a className="dropdown-item" href="/user/dashboard">
+                      ) : (
+                        <a className="dropdown-item" href="/user/dashboard">
                           Profile
                         </a>
-                            
                       )}
                     </li>
-             
-        
+
                     <li>
                       <hr className="dropdown-divider" />
                     </li>
@@ -244,7 +238,6 @@ function TopNav() {
             </div>
           )}
         </Navbar.Collapse>
-    
       </Container>
     </Navbar>
   )

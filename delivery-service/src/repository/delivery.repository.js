@@ -18,6 +18,9 @@ export const getAllDeliveryRepository = async () => {
 export const createDeliveryRepository = async (delivery) => {
   // create a new delivery
   const newDelivery = new Delivery(delivery);
+  //get delivery count
+  const deliveryCount = await Delivery.count();
+  newDelivery.deliveryId = `DEL${deliveryCount + 1}`;
   if (!newDelivery) return null;
 
   try {
@@ -52,7 +55,7 @@ export const getDeliveryByDeliveryIdRepository = async (delivery_id) => {
 // update delivery repository
 export const updateDeliveryRepository = async (delivery) => {
   try {
- // update delivery
+    // update delivery
     const updatedDelivery = await Delivery.findByIdAndUpdate(
       { _id: delivery._id },
       delivery,

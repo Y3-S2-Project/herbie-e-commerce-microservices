@@ -20,6 +20,8 @@ export const createPaymentRepository = async (payment) => {
   const newPayment = new Payment(payment);
    // update order payment status
   await newPayment.save();
+
+  
   // update order payment status
   await Order.findByIdAndUpdate(
     { _id: payment.order_id },
@@ -43,3 +45,20 @@ export const updatePaymentRepository = async (id, payment) => {
     );
   return updatedPayment;
 };
+
+const stripePay = () => {
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price: "{{PRICE_ID}}",
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${process.env.CLIENT_URL}success=true`,
+    cancel_url: `${process.env.CLIENT_URL}/cart`,
+  });
+
+  res.redirect(303, session.url);
+}

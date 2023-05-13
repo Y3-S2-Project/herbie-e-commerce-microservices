@@ -11,10 +11,6 @@ const deliverySchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
     },
-    paymentId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Payment",
-    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -22,13 +18,52 @@ const deliverySchema = new mongoose.Schema(
     deliveryDate: {
       type: Date,
     },
+    deliveryFee: {
+      type: Number,
+      required: true,
+    },
     deliveryStatus: {
       type: String,
       default: "Pending",
     },
+    contactInformation: {
+      firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+      },
+      contactNo: {
+        type: String,
+        required: true,
+      },
+    },
     deliveryAddress: {
-      type: String,
-      required: true,
+      houseNo: {
+        type: String,
+        required: true,
+      },
+      street: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      province: {
+        type: String,
+        required: true,
+      },
+      postalCode: {
+        type: String,
+        required: true,
+      },
     },
   },
   { timestamps: true }

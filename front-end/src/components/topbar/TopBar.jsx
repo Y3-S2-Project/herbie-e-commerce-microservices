@@ -97,7 +97,7 @@ export default function TopBar(props) {
                       Profile
                     </a>
                   </li>
-              
+
                   <li>
                     <hr className="dropdown-divider" />
                   </li>

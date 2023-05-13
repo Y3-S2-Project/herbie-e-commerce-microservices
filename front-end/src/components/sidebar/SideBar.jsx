@@ -54,7 +54,6 @@ export default function SideBar(props) {
                 {!props.isActive ? <small> All Products</small> : <small> </small>}
               </NavLink>
             </li>
-   
           </ul>
         </li>
         <li>
@@ -79,7 +78,6 @@ export default function SideBar(props) {
                 All Category
               </NavLink>
             </li>
-    
           </ul>
         </li>
         <li>
@@ -126,6 +124,18 @@ export default function SideBar(props) {
           >
             <i className="fas fa-shopping-cart"></i>
             {!props.isActive ? <small> Order Management</small> : <small> </small>}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="./commission"
+            className={({ isActive }) =>
+              isActive ? 'font-color side-link selected' : 'font-color side-link '
+            }
+          >
+            <i className="fas fa-money-bill"></i>
+            {/* <FontAwesomeIcon icon="fa-sharp fa-solid fa-comments-dollar" /> */}
+            {!props.isActive ? <small> Commission Management</small> : <small> </small>}
           </NavLink>
         </li>
         <li>
