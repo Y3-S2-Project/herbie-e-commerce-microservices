@@ -347,11 +347,11 @@ const EditProductModal = (props) => {
                   className="tw-px-4 tw-py-2 tw-border tw-focus:outline-none"
                   id="status"
                 >
-                  <option name="status" value="Active">
-                    Active
+                  <option name="status" value="Available">
+                    Available
                   </option>
-                  <option name="status" value="Disabled">
-                    Disabled
+                  <option name="status" value="Out of Stock">
+                    Out Of Stock
                   </option>
                 </select>
               </div>

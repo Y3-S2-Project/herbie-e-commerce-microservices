@@ -51,30 +51,7 @@ export default function SideBar(props) {
               </li>
             </ul>
           </li>
-          <li>
-            <a
-              href="#company"
-              className="font-color dropdown-toggle side-link"
-              data-toggle="collapse"
-              aria-expanded="false"
-            >
-              <i className="fas fa-glasses"></i>
-              <small> Pricing</small>
-            </a>
-            <ul className="collapse list-unstyled font-color" id="company">
-              <li>
-                <NavLink
-                  to="./user/seller-review"
-                  className={({ isActive }) =>
-                    isActive ? 'font-color side-link selected' : 'font-color side-link '
-                  }
-                >
-                  <i className="fa fa-users" aria-hidden="true"></i>
-                  New Company
-                </NavLink>
-              </li>
-            </ul>
-          </li>
+
           <li>
             <NavLink
               to="./seller-reviews"
