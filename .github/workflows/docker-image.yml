@@ -21,7 +21,7 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build the docker image
-      run: docker build front-end/. --file Dockerfile --tag chamathjayasekarahtwondevops/frontend:${{github.sha}}
+      run: docker build front-end/. --file front-end/Dockerfile --tag chamathjayasekarahtwondevops/frontend:${{github.sha}}
 
     - name: Docker push
       run: docker push chamathjayasekarahtwondevops/frontend:${{github.sha}}
