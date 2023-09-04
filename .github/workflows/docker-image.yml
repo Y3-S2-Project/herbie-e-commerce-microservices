@@ -29,6 +29,6 @@ jobs:
         
         # Loop through the list of images and build/push them
         for image in "${images[@]}"; do
-          docker build "$image/." --file "$image/Dockerfile" --tag "$DOCKER_USERNAME/$image:${{ github.sha }}"
-          docker push "$DOCKER_USERNAME/$image:${{ github.sha }}"
+          docker build "$image/." --file "$image/Dockerfile" --tag "chamathjayasekarahtwondevops/$image:${{ github.sha }}"
+          docker push "chamathjayasekarahtwondevops/$image:${{ github.sha }}"
         done
