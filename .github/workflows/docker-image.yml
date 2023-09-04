@@ -8,20 +8,27 @@ on:
 
 jobs:
 
-  build:
+  build_and_push:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-    - name: docker login
-      env :
-        DOCKER_USER: ${{secrets.DOCKER_USERNAME}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+
+    - name: Docker login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - name: Build the docker image
-      run: docker build front-end/. --file front-end/Dockerfile --tag chamathjayasekarahtwondevops/frontend:${{github.sha}}
 
-    - name: Docker push
-      run: docker push chamathjayasekarahtwondevops/frontend:${{github.sha}}
+    - name: Build and push Docker images
+      run: |
+        # Define your image names and paths here
+        images=("front-end" "auth-service" "notification-service" "product-service" "order-service" "shopping-cart-service" "payment-service" "review-service" "commission-service" "delivery-service" "email-service" "integrator-service")
+        
+        # Loop through the list of images and build/push them
+        for image in "${images[@]}"; do
+          docker build "$image/." --file "$image/Dockerfile" --tag "$DOCKER_USERNAME/$image:${{ github.sha }}"
+          docker push "$DOCKER_USERNAME/$image:${{ github.sha }}"
+        done
