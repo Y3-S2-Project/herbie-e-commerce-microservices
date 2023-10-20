@@ -17,7 +17,7 @@ export const sendEmail = asyncHandler(async (req, res) => {
     return makeResponse({
       res,
       status: 404,
-      message: "Error ❌" + error.message,
+      message: "Error ❌" + error.message, // error.message
     });
   }
 });
