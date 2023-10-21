@@ -6,7 +6,7 @@ import EmailSender from "../utils/sendEmail";
 export const sendEmail = asyncHandler(async (req, res) => {
   
   try {
-    const { fullName, email, message } = req.body;
+    const { fullName, email, message } = req.body; // req.body is the data that is sent with the request from the client 
     EmailSender({ fullName, email, message });
     return makeResponse({
       res,

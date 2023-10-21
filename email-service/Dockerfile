@@ -28,7 +28,7 @@ RUN yarn
 COPY . .
 
 # Build production app
-RUN yarn run build
+RUN yarn run build 
 
 # Expose app port
 EXPOSE 3011

@@ -74,7 +74,7 @@ export default function HerbCardList() {
             }}
             onClick={handleScrollLeft}
           >
-            <FontAwesomeIcon icon={faAngleLeft} style={{ color: '#000000', width: '10px' }} />
+            <FontAwesomeIcon icon={faAngleLeft} style={{ color: '#000000', width: '10px' }} /> 
           </Button>
         </div>
         <div
@@ -85,7 +85,7 @@ export default function HerbCardList() {
             containerRef.current.addEventListener('mousemove', handleScroll)
           }}
           onMouseUp={() => {
-            containerRef.current.removeEventListener('mousemove', handleScroll)
+            containerRef.current.removeEventListener('mousemove', handleScroll) // Remove the mousemove event listener when the mouse button is released
           }}
         >
           <div className="slider-track d-flex justify-content-between  align-items-center d-flex flex-nowrap">
